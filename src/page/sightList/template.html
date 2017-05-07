@@ -1,0 +1,14 @@
+<div>
+    <common-header title="景点详情" ></common-header>
+    <div class="constainer">
+
+        <section v-for="message of sightMessages">
+            <div class="line">
+                <img src="../../assets/img/sight.png" alt="">
+            </div>
+            <div class="popover">
+                <popup v-bind:message="message" v-bind:currentPopid="message.id" v-on:close="close"></popup>
+            </div>
+        </section>
+    </div>
+</div>

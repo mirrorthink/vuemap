@@ -1,0 +1,17 @@
+<div class="holder">
+    <common-header title="景点图片"></common-header>
+    <div class="constainer">
+        <swiper :options="swiperOptionTop" class="gallery-top" ref="swiperTop">
+            <swiper-slide v-for="slide in swiperImg" :key="slide.backgroundImage" v-bind:style="slide"></swiper-slide>
+            <div class="swiper-pagination" slot="pagination"></div>
+        </swiper>
+    </div>
+ 
+    <div class="introduce">
+        <div class="cover">
+            <div class="play"><img src='/static/img/play_button.png' alt=""> </div>
+            <h3></h3>
+            <div class="detail"></div>
+        </div>
+    </div>
+</div>
