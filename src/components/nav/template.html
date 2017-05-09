@@ -1,0 +1,11 @@
+
+
+<div class="holder">
+
+    <div class="item" v-for="(message,index) in navMessages" v-on:click="show(index)" >
+        <span class="icon">
+            <img v-bind:src="message.icon" alt="">
+        </span>
+        <span class="title">{{message.item}}</span>
+    </div>
+</div>

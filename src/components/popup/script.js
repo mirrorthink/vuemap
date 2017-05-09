@@ -49,7 +49,7 @@ export default {
             this.$router.push({ name: 'img', params: { id: this.message.id } })
         },
         navPanoramic() {
-            this.$router.push({ name: 'user', params: { userId: 123 } })
+            this.$router.push({ name: 'panoramic', params: { id: this.message.id  } })
         },
         showAudio() {
 

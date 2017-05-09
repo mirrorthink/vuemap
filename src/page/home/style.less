@@ -1,50 +1,35 @@
 #map{
   width:100%;
   height:100vh;
-  position: absolute;
-  top:0px;
-  left: 0px;
 }
-.lable {
-  text-decoration: none;
-  color: white;
-  font-size: 11pt;
-  font-weight: bold;
-  text-shadow: black 0.1em 0.1em 0.2em;
-  padding:0.2 0.5em;
-  background:rgba(255,255,255,1);
-  border: 1px solid rgba(255,255,255,0.8);
-  position: relative;
-  border-radius: 2px;
-  top:-40px;
-  left: -20px;
-  min-width: 40px;
-  display: inline-block;
-  text-align: center;
-  z-index: 5;
-}
+
 .icon{
     position: absolute;
     bottom:0;
     left: 0;
-    padding: 20px;
-    .holder{
-        background: #fff;
-        border:1px solid #fff;
-        border-radius: 4px ;
-        margin-bottom: 10px;
-        padding:10px;
-        width: 30px;
-        height: 32px;
-        display: block;
-        img{
-            width: 100%;
-            height: 100%;
+    padding: 1.25rem;
+    display: flex;
+    align-items: flex-end;
+    .miannav{
+        float: left;
+        .iconHolder{
+            background: #fff;
+            border:1px solid #fff;
+            border-radius: 0.25rem;
+            margin-top: 0.625rem;
+            padding:0.625rem;
+            width: 1.875rem;
+            height: 2rem;
+            display: block;
+            img{
+                width: 100%;
+                height: 100%;
+            }
         }
+    }  
 
-    }
-    
 }
+
 
 #section{
     position: absolute;
@@ -54,4 +39,63 @@
     height: 100vh;
     margin: 0px;
     padding: 0px;
+    overflow: hidden;
+}
+.ol-popup {
+    position: absolute;
+    min-width: 23rem;
+    top: -14.25rem;
+    left:-3.125rem;
+    z-index: 6;
+}
+.sacle-enter-active, .sacle-leave-active {
+  transition: all .2s ease-in
+}
+
+.sacle-enter {
+  transform: rotate3d(0, 1, 0, 90deg);
+}
+.sacle-leave-active {
+  transform: rotate3d(0, 1, 0, -90deg);
+}
+.wrap-outer {
+  display: table;
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  text-align: center;
+
+  .wrap {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+
+    div.content {
+      width: 300px;
+      height: 100px;
+      background: #1FAC75;
+      opacity: 0.9;
+      display: inline-block;
+      margin: auto;
+      border-radius: 10px;
+      ;
+      color: #fff;
+      padding: 10px;
+      font-size: 16px;
+      a {
+        color: #fff;
+        text-decoration: none;
+        background: darken(#1FAC75, 10%);
+        padding: 5px;
+        margin: 10px;
+        opacity: 1;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
 }

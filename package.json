@@ -17,8 +17,10 @@
     "less": "^2.7.2",
     "less-loader": "^4.0.3",
     "openlayers": "^4.1.1",
+    "three.js": "^0.77.1",
     "vue": "^2.2.6",
     "vue-awesome-swiper": "^2.4.0",
+    "vue-baidu-map": "^0.10.4",
     "vue-router": "^2.3.1",
     "vue-router-transition": "^1.0.9",
     "vuex": "^2.3.1"

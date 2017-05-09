@@ -19,6 +19,9 @@ Vue.use(VueAwesomeSwiper)
 
 Vue.use(VueRouter)
 
+
+
+
 export const toRouter = () => {
   console.log(routeRection.direction )
 

@@ -12,7 +12,7 @@ export default {
         }
     },
     mounted() {
-        this.languageActiveItem.item = this.Messages[0];
+        this.languageActiveItem.item = this.Messages.item[this.Messages.activeindex];
 
     },
     methods: {
@@ -21,14 +21,17 @@ export default {
 
         },
 
-        clickItem(item,index) {
+        clickItem(item, index) {
             this.toggleAllshow();
-            this.languageActiveItem.item=item;
-            this.languageActiveItem.index=index;
+            this.languageActiveItem.item = item;
+            this.languageActiveItem.index = index;
+            this.$store.commit({
+                type: 'changMode',
+                name:this.Messages.name,
+                activeindex: index,
+            })
 
         },
-        // ...mapMutations([
-        //    'increment' // 映射 this.increment() 为 this.$store.commit('increment')
-        // ]),
+
     }
 }
