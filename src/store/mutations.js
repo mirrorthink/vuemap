@@ -6,10 +6,23 @@ export default {
 		state[key].activeindex = payload.activeindex;
 	},
 	notHerefun(state, payload) {
-	
-		state.notHere=true;	
+
+		state.notHere = payload.state;
 	},
-	geoErrfun(state, payload){
-		state.geoErr=true;
+	geoErrfun(state, payload) {
+		state.geoErr = payload.state;
+	}
+	,
+	play(state) {
+		state.playing = true
+	},
+	pause(state) {
+		state.playing = false
+	},
+	audioShowContral(state, boolen) {
+		state.audioShow = boolen;
+	},
+	simulate(state, boolen) {
+		state.simulate =boolen ;
 	}
 }

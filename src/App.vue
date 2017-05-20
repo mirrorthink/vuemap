@@ -1,24 +1,37 @@
 <template>
   <div>
-
+  
     <transition :name="$router.app.transition">
       <router-view class="child-view"></router-view>
     </transition>
-
+  
   </div>
 </template>
 
 <script>
+import loading from './components/loading'
 import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
   data() {
     return {
       transitionName: 'slide-left',
-   
+      loadingShow: true,
+
     }
+  },
+  components: {
+    loading
   },
   created: function () {
     // `this` 指向 vm 实例
+    //this.loadingShow=false
+
+
+  },
+  mounted() {
+    setTimeout(() => {
+      this.loadingShow = false
+    }, 200);
 
 
   },
@@ -49,7 +62,7 @@ export default {
 .slide-left-leave-active,
 .slide-right-enter-active,
 .slide-right-leave-active {
-  transition: all .2s ease-in
+  transition: all .4s linear
 }
 
 .slide-left-leave-active,
@@ -71,6 +84,4 @@ html {
   left: opx;
   width: 100%;
 }
-
-
 </style>

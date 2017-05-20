@@ -7,6 +7,10 @@ export default [{
     children: [
         {
             path: '',
+            redirect: '/home'
+        },
+        {
+            path: 'home',
             name: 'home',
             component: r => require.ensure([], () => r(require('../page/home')), 'home')
         },

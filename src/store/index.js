@@ -61,6 +61,7 @@ const state = {
 
 
 	],
+
 	popupContent: [
 		{
 			'id': 'lib',
@@ -85,7 +86,11 @@ const state = {
 			'dec': '祈福邮局。观音山祈福邮局精巧别致，古色古香；邮局快递的不仅是一份开光物品，更是一份祝福，一份爱心。邮局的奇妙之处就是“福传万家”，把观音菩萨的祝福和加.',
 
 		}
-	]
+	],
+	playing:false,
+	audioUrl:'',
+	audioShow:false,
+	simulate:false,
 
 }
 
