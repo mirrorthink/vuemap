@@ -1,6 +1,5 @@
 # vuemap
-#改用vue写
-> A Vue.js project
+
 
 ## Build Setup
 
@@ -27,4 +26,4 @@ npm run e2e
 npm test
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
