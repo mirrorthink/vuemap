@@ -1,0 +1,39 @@
+section{
+    position: relative;
+    top:-93vh;
+    clear: both;
+    z-index: 3;
+    font-size: 1rem;
+    span{      
+        padding: 0.6rem;        
+        background: #FFF;
+        margin-bottom: 1rem;
+        &.active{
+            background:rgb(0, 204, 0);
+        }
+    }
+    div.active{
+        span{      
+            float: right;
+        }
+   }
+    .all{
+        position: absolute;
+        top:0px;
+        right:0px;
+         span{      
+            display: inline-block;    
+
+        }
+        overflow: hidden;
+
+    }
+}
+.fade-enter-active, .fade-leave-active {
+  transition: all .2s ease-in
+}
+
+.fade-enter, .fade-leave-active {
+  transform: translateX(100%)
+}
+
