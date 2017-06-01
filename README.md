@@ -1,4 +1,9 @@
 # vuemap
+设计稿为 375*603 4.7寸
+
+14px = 1rem
+//header部分64px  4.6rem
+
 
 
 ## Build Setup

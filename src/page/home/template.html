@@ -1,4 +1,64 @@
-<section id="section" v-on:touchstart="hack">
+<section id="section" class='container'  >
+    <div class="ol-map" id="map" ref="map">
+        <div id="overlayerHolder"></div>
+    </div>
+    <div class="toggleholder" v-bind:class="{ active: allShow}">
+        <toggleBar v-bind:Messages="languageMessages" ></toggleBar>
+        <toggleBar v-bind:Messages="languagemode"></toggleBar>
+    </div>
+    <img id="geolocation_marker" src="../../assets/img/map_position_point@2x.png" />
+    <div class="icon">
+        <div class="miannav">
+            <a class="iconHolder" v-on:click="locate()">
+              <img src="/static/img/nav_navigation@2x.png" />
+              <span>定位</span>
+           </a>
+            <router-link to="sightList" class="iconHolder">
+                <img src="/static/img/nav_detail@2x.png" />
+                <span>所有景点</span>
+            </router-link>
+            <a class="iconHolder" v-on:click="toggleNav">
+                
+               <img  src="/static/img/nav_layer@2x.png" />
+               <span>兴趣点</span>
+            </a>
+        </div>
+
+    </div>
+    <transition name="sacle">
+        <div class="mynav" v-if="navShow">
+            <mynav v-if="navShow" @change="navChange($event)"></mynav>
+        </div>
+    </transition>
+    <transition name="fade">
+        <loading message="正在获取定位" v-if="loadingShow"></loading>
+    </transition>
+
+    <transition name="upIn">
+        <div v-if="popupShow" class="popupCointer">
+            <div class="closeHolder">
+                <span class="close" v-on:click="popupShow=!popupShow">
+                    <img src="/static/img/map_close@3x.png" alt="">
+                </span>
+            </div>
+            <popup close="true" v-bind:message="activeOverlayerMessage" v-bind:currentPopid="currentPopid" v-on:close="close"></popup>
+        </div>
+    </transition>
+    <div class="wrap-outer" v-if="state">
+        <div class="wrap">
+            <div class="content">
+                <h5><span>{{geoMessage}}</span></h5>
+                <a v-on:click="goOn" v-if="state">继续浏览</a>
+                <a v-on:click="navigate" v-if="notHere">导航到此</a>
+            </div>
+        </div>
+    </div>
+    <transition name="upIn">
+        <audioplay v-show="audioShow" v-on:close="audioShowContral()"></audioplay>
+    </transition>
+</section>
+
+<!--<section id="section" >
     <div class="ol-map" id="map" ref="map"></div>
     <a id="meLable" class="lable" target="_blank">我</a>
     <img id="geolocation_marker" src="../../assets/img/me.png" />
@@ -39,7 +99,5 @@
     <transition name="upIn">
         <audioplay v-show="audioShow" v-on:close="audioShowContral()"></audioplay>
     </transition>
-    <transition name="fade">
-        <loading message="正在获取定位" v-if="loadingShow"></loading>
-    </transition>
-</section>
+
+</section>-->

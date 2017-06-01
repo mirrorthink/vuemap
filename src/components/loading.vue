@@ -1,54 +1,79 @@
 <template>
-  <div class="Cointener">
-    <h5>{{message}}</h5>
-    <div class="loading">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
+  <div class="wraper" ref="wraper">
+    <div class="Cointener">
   
+      <div class="inner">
+        <h5>{{message}}</h5>
+        <div class="loading">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-
-
 export default {
   name: 'loading',
   props: {
     message: {
       type: String,
+      default: ''
     },
   },
   data() {
     return {
-      iconPlay: '/static/img/icon-play.png',
-      iconPause: '/static/img/icon-pause.png',
-      coverImgUrl: '/static/img/icon-music.png',
-      song: '图书馆',
-      dataUrl: '/static/test.mp3',
-    }
-  }
 
+    }
+  },
+  mounted() {
+    let lable = document.querySelector('.lable');
+    window.addEventListener('scroll', () => {
+
+
+    this.$refs.wraper && ( this.$refs.wraper.style.top = document.body.scrollTop+'px') ;
+  
+
+
+    })
+
+
+
+  },
 }
 </script>
 
 
 <style scoped lang="less">
-
 .Cointener {
-  position: absolute;
-  left: 35%;
-  top: 45%;
-  width: 30%;
-  background: #fff;
-
-  padding: 10px;
+  box-sizing: content-box;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
   z-index: 99;
   color: rgb(0, 191, 255);
   font-weight: normal;
   border-radius: 0.5rem;
+}
+
+.inner {
+  background: #fff;
+  display: inline-block;
+  margin: auto;
+  padding: 10px 10px 17px;
+  border-radius: 5px;
+}
+
+.wraper {
+  display: table;
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
 }
 
 h5 {
@@ -58,18 +83,18 @@ h5 {
 }
 
 .loading {
-  width:84px;
-  height:7px;;
+  width: 84px;
+  height: 7px;
   margin: 0 auto;
 }
 
 .loading span {
   display: inline-block;
-  width:7px;
+  width: 7px;
   height: 100%;
   margin-right: 5px;
   border-radius: 50%;
-  background: deepskyblue;
+  background: rgb(146, 112, 40);
   -webkit-animation: load 1.04s ease infinite;
 }
 
@@ -105,6 +130,4 @@ h5 {
 .loading span:nth-child(5) {
   -webkit-animation-delay: 0.65s;
 }
-
-
 </style>

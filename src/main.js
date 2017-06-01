@@ -35,15 +35,6 @@ Vue.use(VueLazyload, {
 
 
 
-export const toRouter = () => {
-  console.log(routeRection.direction)
-
-  if (routeRection.direction === 'forward') {
-    return 'slide-right'
-  } else {
-    return 'slide-left'
-  }
-}
 const router = new VueRouter({
   routes
 })
@@ -51,8 +42,9 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   console.log(from.name)
+    console.log(to.name)
   setTimeout(() => {
-    let transitions = !from.name ? 'slide-left' : toRouter()
+    let transitions = !from.name ? '' : ((from.name == 'home') || (from.name == 'sightList' && to.name != 'home' ) ) ? 'slide-right' : 'slide-left';
     router.app.transition = transitions
     next()
     Vue.prototype.direction = 'forward'

@@ -9,9 +9,18 @@ html {
   /* 2 */
 }
 
-
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing:border-box;
+  font-size: 1rem;
+  color:#7A7A7F;
+}
 body {
   margin: 0;
+}
+.container{
+  padding: 0;
 }
 
 
@@ -553,6 +562,7 @@ template {
 .ol-zoom{
   z-index: 9999;
 }
+/*
 .lable {
   text-decoration: none;
   color: white;
@@ -571,5 +581,97 @@ template {
   text-align: center;
   z-index: 2;
  box-shadow: 0.1rem 0.1rem 0.5rem rgba(223, 223, 223, 0.6);
+ 
+}*/
+
+.lable {
+  padding:0.5rem 1rem 0.5rem 2.7rem;
+  background:rgba(255,255,255,1);
+  position: relative;
+  border-radius: 0.3rem;
+  border: none;
+  min-width: 8rem;
+  font-size: 1rem;
+  color:#7A7A7F ;
+  
+
+ 
+}
+.lable::before {
+    content: '';
+    width: 0;
+    height: 0;
+    border: 0.6rem solid transparent;
+    border-top-color: #FFF;
+    position: absolute;
+    left:25%;
+    bottom: -1.1rem;
 }
 
+
+.lable::after {
+    width: 1.71rem;
+    height: 1.71rem;
+    position: absolute;
+    display: block;
+    top:.25rem;
+    left: 0.57rem;
+    content: ' ';
+}
+.lable.sight::after{
+    background:url(../assets/img/int_jingdian@2x.png);
+    background-size:1.71rem 1.71rem;
+}
+.lable.wc::after{
+    background:url(../assets/img/int_WC@2x.png);
+    background-size:1.71rem 1.71rem;
+}
+.lable.food::after{
+    background:url(../assets/img/int_eat@2x.png);
+    background-size:1.71rem 1.71rem;
+}
+.lable.park::after{
+    background:url(../assets/img/int_Park@2x.png);
+    background-size:1.71rem 1.71rem;
+}
+.lable.stop::after{
+    background:url(../assets/img/int_bus@2x.png);
+    background-size:1.71rem 1.71rem;
+}
+.lable.panoramic::after{
+    background:url(../assets/img/int_360@2x.png);
+    background-size:1.71rem 1.71rem;
+}
+.lable.other::after{
+    background:url(../assets/img/int_other@2x.png);
+    background-size:1.71rem 1.71rem;
+}
+
+
+
+a{
+  text-decoration: none;
+  color:inherit;
+}
+.ol-control button{
+   background: rgba(255, 255, 255, 1)!important;
+
+   float:right;
+   clear: both;
+   width: 2.71rem!important;
+   height: 2.71rem!important;
+   display: block!important;
+   color:#7A7A7F!important;
+   font-size: 2rem!important;
+   border: none!important;
+   margin: 0!important;
+   border-bottom: 0.21px solid #E6E6E6!important;
+}
+.ol-zoom{
+  position: absolute!important;
+  right: 0.86rem!important;
+  display: inline-block!important;
+  left: auto!important;
+  bottom:45vh!important;
+  top: auto!important;
+}

@@ -1,10 +1,11 @@
 <template>
   <div>
-  
     <transition :name="$router.app.transition">
       <router-view class="child-view"></router-view>
     </transition>
-  
+    
+      <loading v-if="loading"></loading>
+
   </div>
 </template>
 
@@ -15,7 +16,7 @@ export default {
   data() {
     return {
       transitionName: 'slide-left',
-      loadingShow: true,
+      loading: false,
 
     }
   },
@@ -25,54 +26,68 @@ export default {
   created: function () {
     // `this` 指向 vm 实例
     //this.loadingShow=false
+  },
+  mounted() {
+
+  
 
 
   },
-  mounted() {
-    setTimeout(() => {
-      this.loadingShow = false
-    }, 200);
-
-
+  computed: mapState(['loadingShow']),
+  methods: {
   },
   watch: {
     '$route'(to, from) {
       const toDepth = to.path
       const fromDepth = from.path
       this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+    },
+    loadingShow(curVal, oldVal) {
 
-
+      this.loading = curVal;
     },
 
   },
-
-
-
-
-  methods: {
-
-
-  }
 }
 </script>
 
 
 <style lang="less" scoped>
+.loadingContainer{
+  position: absolute;
+}
 .slide-left-enter-active,
-.slide-left-leave-active,
+
 .slide-right-enter-active,
-.slide-right-leave-active {
-  transition: all .4s linear
+{
+  transition: all .3s linear 0.05s
 }
 
+.slide-right-leave-active,
 .slide-left-leave-active,
+{
+  transition: all .3s linear 0.05s
+}
+
 .slide-right-enter {
-  transform: translateX(100%)
+ // transform: translateX(100%)
 }
 
 
-.slide-left-enter,
+
+
+
+
+/*
+.slide-left-leave-active{
+ transform: translateX(20%)
+}*/
+
 .slide-right-leave-active {
+  transform: translateX(-20%)
+}
+
+.slide-left-enter {
   transform: translateX(-100%)
 }
 

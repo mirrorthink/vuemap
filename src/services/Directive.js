@@ -17,7 +17,7 @@ export const Direct = {
         // t.$cookie.set('token', 'WUksks883KXK', {path: '/', expires: '1M'})
         el.addEventListener('click', () => {
           if (!t.$cookie.get('token')) {
-            t.$router.push({name: 'login'})
+            t.$router.push({ name: 'login' })
           }
         })
       }
@@ -42,6 +42,13 @@ export const Direct = {
         el.addEventListener('click', () => {
           // console.log(this)
         })
+      }
+    },
+    {
+      name: 'substr',
+      update: (el) => {
+        el.innerHTML=el.innerHTML.substring(0,40)+"..."
+   
       }
     }
   ],
