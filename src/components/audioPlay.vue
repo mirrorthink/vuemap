@@ -55,6 +55,7 @@ export default {
 
   methods: {
     tapButton(boolean) {
+
       event && event.preventDefault()
       if (this.playing) {
         console.log('playing')
@@ -67,18 +68,8 @@ export default {
 
     },
     onclose() {
-      this.$emit('close')
-      //  this.pause();
-
-      // this.audioShowContral(true);
-      this.$store.dispatch({
-        type: 'play',
-        id: 'slient',
-      }).then(() => {
-        this.$refs.audio.play()
-        this.audioShowContral(false);
-      })
-
+      this.pause();
+      this.audioShowContral(false);
     },
     formatTime(time) {
       let s = (parseInt(time) % 60) > 9 ? (parseInt(time) % 60) : '0' + (parseInt(time) % 60);
@@ -87,7 +78,7 @@ export default {
       return m + ':' + s;
     },
     ...mapMutations([
-      'play', 'pause', 'changeLoadingShow'
+      'play', 'pause', 'changeLoadingShow', 'audioShowContral'
     ])
   },
   mounted() {
@@ -95,34 +86,24 @@ export default {
     // this.currentTime = parseInt(document.getElementById('music').currentTime)
     //  console.log(parseInt(document.getElementById('music').duration))
     let audio = document.getElementById('music')
+    var that = this;
 
 
 
     audio.addEventListener('loadstart', () => {
-
-  
-      if (audio.seeking) {
-        //this.changeLoadingShow(true);
+      console.log(audio.src)
+      if (audio.src && this.playing　) {
+        this.changeLoadingShow(true);
       }
-
-      //this.duration = this.formatTime(audio.duration);
-      // audio.play()
-
     });
-    audio.addEventListener('waiting', () => {
+    audio.addEventListener('loadedmetadata', () => {
 
-
-     // if (audio.seeking) {
-       // this.changeLoadingShow(true);
-     // }
-
-      //this.duration = this.formatTime(audio.duration);
-      // audio.play()
 
     });
 
-    audio.addEventListener('canplay', () => {
-      console.log('canplay')
+
+    audio.addEventListener('canplaythrough', () => {
+
       this.changeLoadingShow(false);
       this.duration = this.formatTime(audio.duration);
       // audio.play()
@@ -141,8 +122,17 @@ export default {
 
       if (val) {
 
+        var playPromise = this.$refs.audio.play();
+        if (playPromise !== undefined) {
+          playPromise.then(function () {
+            // Automatic playback started!
+          }).catch(function (error) {
+            // Automatic playback failed.
+            // Show a UI element to let the user manually start playback.
+            alert(error)
+          });
+        }
 
-        this.$refs.audio.play()
       } else {
         this.$refs.audio.pause()
       }

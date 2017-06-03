@@ -41,10 +41,12 @@ const router = new VueRouter({
 
 
 router.beforeEach((to, from, next) => {
-  console.log(from.name)
-    console.log(to.name)
   setTimeout(() => {
-    let transitions = !from.name ? '' : ((from.name == 'home') || (from.name == 'sightList' && to.name != 'home' ) ) ? 'slide-right' : 'slide-left';
+   // let transitions = !from.name ? '' : ((from.name == 'home') || (from.name == 'sightList' && to.name != 'home' ) ) ? 'slide-right' : '';
+       let transitions =  ((from.name == 'home') || (from.name == 'sightList' && to.name != 'home' )  ) ? 'slide-right' : (to.name == 'home' || (to.name == 'sightList' && from.name != 'home' )) ? 'slide-left' :'';
+
+
+    console.log(transitions)
     router.app.transition = transitions
     next()
     Vue.prototype.direction = 'forward'

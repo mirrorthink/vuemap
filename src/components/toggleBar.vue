@@ -34,14 +34,41 @@ export default {
 
     },
     methods: {
+        audioready() {
+
+            var that = this;
+            if (this.languageActiveItem.index == 1) {
+                if (this.Messages.item.length < 3) {
+                    console.log('touchstart')
+                    that.$store.dispatch({
+                        type: 'play',
+                        id: 'slient',
+                    }).then(function (value) {
+
+                        that.play()
+
+                        that.audioShowContral(true);
+                    })
+
+                    setTimeout(() => {
+                        that.pause();
+                        that.$store.dispatch({
+                            type: 'play',
+                            id: 'canteen',
+                        }).then(function (value) {
+                            that.play()
+                            that.audioShowContral(true);
+                        })
+                    }, 10000);
+                }
+            }
+        },
         toggleAllshow() {
             var that = this;
-            console.log('toggleAllshow')
+
             if (this.Messages.item.length > 2) {
                 this.allShow = !this.allShow;
-                this.toggleAllShow()
-
-
+                this.changetoggleAllShow()
             } else {
                 this.languageActiveItem.index = (this.languageActiveItem.index + 1) % 2;
                 this.languageActiveItem.item = this.Messages.item[this.languageActiveItem.index];
@@ -52,29 +79,27 @@ export default {
                 })
 
                 if (this.languageActiveItem.index == 1) {
+                    this.changeFlesh(true);
+                    that.$store.dispatch({
+                        type: 'play',
+                        id: 'slient',
+                    }).then(function (value) {
+
+                        that.play();
+                        that.audioShowContral(false);
+
+                    })
+
                     if (!this.geoErr && !this.notHere) {
 
-                        that.$store.dispatch({
-                            type: 'play',
-                            id: 'slient',
-                        }).then(function (value) {
-                            that.play();
-                            that.audioShowContral(true);
-                        })
-                        setTimeout(() => { this.locating(true) }, 1);
-
+                        that.locating(true)
 
 
                     } else {
-                        that.$store.dispatch({
-                            type: 'play',
-                            id: 'slient',
-                        }).then(function (value) {
-                            that.play();
-                            that.audioShowContral(true);
-                        })
-                    }
 
+                    }
+                } else {
+                    
                 }
             }
         },
@@ -92,10 +117,10 @@ export default {
 
         },
         ...mapMutations([
-            'toggleAllShow', 'play', 'audioShowContral', 'locating'
+            'changetoggleAllShow', 'play', 'audioShowContral', 'locating', 'pause', 'changeFlesh'
         ])
     },
-    computed: mapState(['geoErr', 'notHere']),
+    computed: mapState(['geoErr', 'notHere', 'currentPosition']),
 
 }
 </script>
@@ -148,55 +173,4 @@ section {
     min-width: 28rem;
     transform: translateX(100%)
 }
-
-
-
-
-
-
-
-
-
-/*
-section {
-    position: relative;
-    clear: both;
-
-       z-index: 3;
-    span {
-        padding: 0.6rem;
-        background: #FFF;
-        margin-bottom: 1rem;
-        border: 1px solid #deepskyblue;
-        &.active {
-            background: deepskyblue;
-            color: #fff;
-            border-radius: 0.15rem;
-        }
-    }
-    div.active {
-        span {
-            float: right;
-        }
-    }
-    .all {
-        position: absolute;
-        top: 0px;
-        right: 0px;
-        span {
-            display: inline-block;
-        }
-        overflow: hidden;
-    }
-}
-
-.fade-enter-active,
-.fade-leave-active {
-    transition: all .2s ease-in
-}
-
-.fade-enter,
-.fade-leave-active {
-    transform: translateX(100%)
-}*/
 </style>

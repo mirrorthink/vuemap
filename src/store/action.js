@@ -1,42 +1,47 @@
 var audiolist = [
 	{
+
+
+		audioUrl: "/static/mp3/audio5.mp3",
+		title: '图书馆',
 		id: "lib",
-		audio: {
-			audioUrl: "/static/mp3/audio5.mp3",
-			title: '图书馆'
-		}
+
 
 	},
 	{
+
+
+		audioUrl: "/static/mp3/audio2.mp3",
+		title: '教学楼',
 		id: "tech",
-		audio: {
-			audioUrl: "/static/mp3/audio2.mp3",
-			title: '教学楼'
-		}
+
 
 	},
 	{
+
+
+		audioUrl: "/static/mp3/audio3.mp3",
+		title: '宿舍',
 		id: "dormitory",
-		audio: {
-			audioUrl: "/static/mp3/audio3.mp3",
-			title: '宿舍'
-		}
+
 
 	},
 	{
+
+
+		audioUrl: "/static/mp3/audio4.mp3",
+		title: '饭堂',
 		id: "canteen",
-		audio: {
-			audioUrl: "/static/mp3/audio4.mp3",
-			title: '饭堂'
-		}
+
 
 	},
 	{
+
+
+		audioUrl: "/static/mp3/slient.mp3",
+		title: '无声',
 		id: "slient",
-		audio: {
-			audioUrl: "/static/mp3/slient.mp3",
-			title: '无声'
-		}
+
 
 	},
 ]
@@ -168,18 +173,37 @@ var IconlayerMessage = {
 export default {
 
 	play({ commit, state }, payload) {
-		console.log('paly')
+
 		return new Promise((resolve, reject) => {
-			let filterResult = audiolist.filter(function (item, index, array) {
-				return (item.id == payload.id);
-			});
-			if (filterResult.length) {
-				state.audio = filterResult[0].audio;
-				console.log(state.audio)
-				resolve(filterResult[0].audio)
+			if (payload.id) {
+				let filterResult = audiolist.filter(function (item, index, array) {
+					return (item.id == payload.id);
+				});
+				if (filterResult.length) {
+					state.audio = filterResult[0];
+					console.log(state.audio)
+					resolve(filterResult[0])
+				} else {
+					reject();
+				}
 			} else {
-				reject();
+				state.audio = {
+
+
+					audioUrl: '',
+					title: '',
+					id: "",
+
+
+				}
+				resolve()
 			}
+
+
+
+
+
+
 
 
 		})

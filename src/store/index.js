@@ -31,9 +31,6 @@ const state = {
 		activeindex: 0,
 
 	},
-	activeOverlayerMessage: {
-
-	},
 	sightMessages: [
 		{
 			'id': 'lib',
@@ -105,13 +102,15 @@ const state = {
 
 	audio: {
 		audioUrl: "/static/mp3/slient.mp3",
-		title: '无声'
+		title: '无声',
+		id:'slient',
 	},
 	audioShow: false,
 	simulate: false,
 	loadingShow: false,
 	auto:false,
 	locating:false,
+	flesh:true,
 
 }
 

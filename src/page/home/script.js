@@ -26,6 +26,7 @@ export default {
             marker: null,
             musicPlay: null,
             navShow: false,
+            setCenterFlag: true,
             layer1: new ol.layer.Tile({
                 source: new ol.source.XYZ({
                     url: "https://notifysystem.trade/jnu/{z}/{x}-{y}.jpg"
@@ -122,7 +123,7 @@ export default {
             e.stopPropagation()
             let coordinate = e.coordinate;
             let lc = ol.coordinate.toStringXY(ol.proj.transform(coordinate, 'EPSG:3857', 'EPSG:4326'), 6);
-            // console.log(lc)
+            console.log(lc)
         });
         this.creatMeMarker();
         this.map.setTarget(this.$refs.map.id)
@@ -146,7 +147,7 @@ export default {
         }));
         this.map.addOverlay(this.overlay);
     },
-    computed: mapState(['languageMessages', 'languagemode', 'popupContent', 'geoErr', 'notHere', 'audioShow', 'allShow', 'auto','playing','locating']),
+    computed: mapState(['languageMessages', 'languagemode', 'popupContent', 'geoErr', 'notHere', 'audioShow', 'allShow', 'auto', 'playing', 'locating', 'audio', 'flesh']),
 
     methods: {
         hack() {
@@ -187,7 +188,7 @@ export default {
 
             this.geolocation.setTracking(true); // Start position tracking
             this.geolocation.on('change', function () {
-                   console.log('geolocation')
+                console.log('geolocation')
 
                 var position = that.geolocation.getPosition();
 
@@ -217,42 +218,11 @@ export default {
                     })
                 } else {
                     //在区域范围内
-                    that.view.setCenter(posme)
-                    //自动播放模式  
-                 
+
+                    that.setCenterFlag && that.view.setCenter(posme)
+                    that.setCenterFlag = false;
                     if (that.autoplay) {
-                        
-                        //test
-
-                        if (((113.406814 < pos[0] && pos[0] < 113.407822) && (23.019997 < pos[1] && pos[1] < 23.021636))) {
-                            that.$store.dispatch({
-                                type: 'play',
-                                id: 'dormitory',
-                            }).then(function (value) {
-                                that.play();
-                                that.audioShowContral(true);
-                            })
-
-                        } else if (((113.407539 < pos[0] && pos[0] < 113.409227) && (23.019375 < pos[1] && pos[1] < 23.020442))) {
-                            that.$store.dispatch({
-                                type: 'play',
-                                id: 'lib',
-                            }).then(function (value) {
-                                that.play();
-                                that.audioShowContral(true);
-                            })
-
-                        } else {
-                            that.$store.dispatch({
-                                type: 'play',
-                                id: 'slient',
-                            }).then(function (value) {
-                                that.play();
-                                that.audioShowContral(true);
-                            })
-                        }
-
-                        //test
+                        that.playByLocate(pos)
                     }
                 }
 
@@ -276,7 +246,63 @@ export default {
 
             });
         },
+        playByLocate(pos, auto) {
+
+            if (((113.406814 < pos[0] && pos[0] < 113.407822) && (23.019997 < pos[1] && pos[1] < 23.021636))) {
+                if (this.audio.id == 'dormitory' || this.playing ) {
+                    return
+                }
+
+                this.dispatchPlayById(this, 'dormitory', auto)
+            } else if (((113.407539 < pos[0] && pos[0] < 113.409227) && (23.019375 < pos[1] && pos[1] < 23.020442))) {
+                if (this.audio.id == 'lib'  || this.playing) {
+                    return
+                }
+                this.dispatchPlayById(this, 'lib', auto)
+
+            } else {
+                if (this.audio.id == 'tech'  || this.playing) {
+                    return
+                }
+                this.dispatchPlayById(this, 'tech', auto)
+
+            }
+        },
+        dispatchPlayById(that, id, auto) {
+            that.$store.dispatch({
+                type: 'play',
+                id: id,
+            }).then(function (value) {
+                //   that.pause();
+                // that.play();
+                that.audioShowContral(true);
+                if (auto) {
+                    that.play();
+                } else {
+                    that.pause();
+                }
+            })
+            that.changeFlesh(false)
+
+            that.getSightMessageById(id).then(function (data) {
+                //Object.assign只是浅拷贝
+                var wgs84Sphere = new ol.Sphere(6378137);
+                that.activeOverlayerMessage = Object.assign({ mode: 'auto' }, data);
+
+
+
+                //防止修改原本对象 采用深拷贝
+                let tempdata = JSON.parse(JSON.stringify(data))
+                tempdata.location[1] = tempdata.location[1] - 0.000775;
+                let posme = ol.proj.transform(tempdata.location, 'EPSG:4326', 'EPSG:3857');
+                that.view.setCenter(posme);
+                that.view.setZoom(18);
+                that.popupShow = true;
+
+            })
+        },
         locate() {
+            this.setCenterFlag = true;
             this.$store.commit({
                 type: 'geoErrfun',
                 state: null,
@@ -361,7 +387,7 @@ export default {
         ...mapActions([
             'getSightMessageById', 'getlayerMessage' // 
         ]),
-        ...mapMutations(['audioShowContral', 'play', 'pause', 'simulate', 'changeCurrentPosition'])
+        ...mapMutations(['audioShowContral', 'play', 'pause', 'simulate', 'changeCurrentPosition', 'changeFlesh'])
 
     },
     watch: {
@@ -377,16 +403,15 @@ export default {
             this.allShow = curVal;
         },
         locating(curVal, oldVal) {
- 
-            console.log('locating')
-            if (curVal ) {
+            this.playByLocate(this.currentPosition, true)
+            if (curVal) {
                 this.geofunction()
-         
+
             }
 
         },
-        auto(curVal, oldVal){
-            this.autoplay=curVal
+        auto(curVal, oldVal) {
+            this.autoplay = curVal
 
         }
     },

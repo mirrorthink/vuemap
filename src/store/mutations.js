@@ -31,7 +31,7 @@ export default {
 	simulate(state, boolen) {
 		state.simulate = boolen;
 	},
-	toggleAllShow(state) {
+	changetoggleAllShow(state) {
 		state.allShow = !state.allShow;
 	},
 	changeCurrentPosition(state, payload) {
@@ -43,6 +43,9 @@ export default {
 	},
 	locating(state, payload) {
 		state.locating = payload
+	},
+	changeFlesh(state, payload) {
+		state.flesh = payload;
 	}
 
 }

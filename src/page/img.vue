@@ -1,6 +1,6 @@
 <template>
 <div class="holder">
-    <common-header title="景点图片"></common-header>
+
     <div class="constainer">
         <div class="wrapper">
 

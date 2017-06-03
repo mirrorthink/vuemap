@@ -46,9 +46,8 @@ export const Direct = {
     },
     {
       name: 'substr',
-      update: (el) => {
-        el.innerHTML=el.innerHTML.substring(0,40)+"..."
-   
+      update: (el,binding) => {
+        el.innerHTML=el.innerHTML.substring(0,binding.value)+"..."
       }
     }
   ],

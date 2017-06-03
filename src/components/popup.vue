@@ -17,20 +17,20 @@
         </div>
         <div class="content">
             <div class="left">
-                <div class="img">
+                <div class="img" v-bind:class="{ small: message.mode == 'auto' }">
                     <img :src="message.imgurl" alt="">
                 </div>
             </div>
             <div class="right">
-                <div class="detail" v-substr> {{message.dec}}</div>
+                <div class="detail" v-substr="message.mode == 'auto' ?  25 : 50"> {{message.dec}}</div>
     
             </div>
     
         </div>
-        <div class="more">
+        <div class="more" v-bind:class="{ small: message.mode == 'auto' }">
             <a v-on:click="navDetail">更多详情</a>
         </div>
-        <div class="buttom">
+        <div class="buttom" v-if="message.mode != 'auto' ">
             <a class="holder" v-on:click="playaudio">
                 <span class="icon">
                     <img src="/static/img/detail_vioce@3x.png" alt="">
@@ -56,7 +56,7 @@
                 <div class="title">去这里</div>
             </a>
         </div>
-        
+    
     </div>
 </template>
 <script>
@@ -75,7 +75,8 @@ export default {
                     'id': '',
                     'title': '',
                     'dec': '',
-                    'location': []
+                    'location': [],
+                    'mode': ''
                 }
             }
         },
@@ -99,15 +100,18 @@ export default {
 
             ],
             distant: 0,
+            substrNumber: 40,
         }
     },
     computed: mapState(['currentPosition']),
     mounted() {
-       /* var wgs84Sphere = new ol.Sphere(6378137);
-        let distant = wgs84Sphere.haversineDistance(this.message.location, this.currentPosition);
-        // console.log(this.message.location)
-        this.distant = distant ? (distant > 1000 ? distant.toFixed(0) / 1000 + 'km' : distant.toFixed(0) + 'm') : '未知';*/
-         this.distant=computDistant(this.message.location, this.currentPosition)
+        /* var wgs84Sphere = new ol.Sphere(6378137);
+         let distant = wgs84Sphere.haversineDistance(this.message.location, this.currentPosition);
+         // console.log(this.message.location)
+         this.distant = distant ? (distant > 1000 ? distant.toFixed(0) / 1000 + 'km' :
+          distant.toFixed(0) + 'm') : '未知';*/
+        this.distant = computDistant(this.message.location, this.currentPosition);
+        (this.message.mode == 'auto') ? (this.substrNumber = 20) : (this.substrNumber = 40)
     },
     created: function () {
 
@@ -211,6 +215,10 @@ export default {
             .img {
                 width: 6.29rem;
                 height: 6.29rem;
+                &.small {
+                    width: 2.86rem!important;
+                    height: 2.86rem!important;
+                }
                 img {
                     width: 100%;
                     height: 100%;
@@ -229,6 +237,11 @@ export default {
         margin-bottom: 1.36rem;
         display: flex;
         justify-content: flex-end;
+        &.small {
+            margin-bottom: 0.5rem!important;
+        }
+
+
 
         a {
             background: #927028;
@@ -245,6 +258,7 @@ export default {
         display: flex;
         justify-content: space-around;
         padding: 0.2rem;
+        border-top: 1px solid #E6E6E6;
 
         a.holder {
             display: inline-block;
