@@ -1,9 +1,9 @@
-<section id="section" class='container'  >
+<section id="section" class='container'>
     <div class="ol-map" id="map" ref="map">
         <div id="overlayerHolder"></div>
     </div>
     <div class="toggleholder" v-bind:class="{ active: allShow}">
-        <toggleBar v-bind:Messages="languageMessages" ></toggleBar>
+        <toggleBar v-bind:Messages="languageMessages"></toggleBar>
         <toggleBar v-bind:Messages="languagemode"></toggleBar>
     </div>
     <img id="geolocation_marker" src="../../assets/img/map_position_point@2x.png" />
@@ -56,5 +56,7 @@
     <transition name="upIn">
         <audioplay v-show="audioShow" v-on:close="audioShowContral()"></audioplay>
     </transition>
+    <audio src="http://120.76.121.29:3000/users/audio3.mp3" id="bgmusic"> 
+        您的浏览器不支持 audio 标签。
+    </audio>
 </section>
-

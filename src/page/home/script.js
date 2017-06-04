@@ -6,6 +6,7 @@ import popup from '../../components/popup'
 import mynav from '../../components/nav'
 import loading from '../../components/loading'
 import audioplay from '../../components/audioPlay'
+import wx from 'weixin-js-sdk'
 export default {
     name: 'hello',
     components: {
@@ -83,9 +84,24 @@ export default {
             // this.sightLayer.setVisible(true);
             this.layerTogleShow('sight', true)
         })
+        ///jssdk
+
+
+
+
+
+
     },
 
     mounted() {
+
+        this.$http.get('https://notifysystem.trade:3001/backend/personinfo').then(response => {
+           // alert(JSON.stringify(response))
+
+        }, err => {
+
+          //  alert(JSON.stringify(err))
+        });
         this.musicPlay = document.getElementById('music');
 
         //点击弹框事件，原始方式
@@ -150,6 +166,33 @@ export default {
     computed: mapState(['languageMessages', 'languagemode', 'popupContent', 'geoErr', 'notHere', 'audioShow', 'allShow', 'auto', 'playing', 'locating', 'audio', 'flesh']),
 
     methods: {
+        configJssdk() {
+            var param = {
+                debug: true,
+                jsApiList: ['playVoice', 'pauseVoice', 'stopVoice', 'onVoicePlayEnd'],
+                url: 'https://www.notifysystem.trade'
+            };
+            this.$http.get('https://notifysystem.trade:3001/backend/JsConfig',{param:param}).then(response => {
+                console.log(response)
+                wx.config(response.data);
+                wx.ready(() => {
+                    console.log('wx.ready')
+                    //alert('wx.ready')
+                    document.getElementById('music').play();
+                });
+                wx.error(function (err) {
+                    console.log(JSON.stringify(err))
+                    //alert('wx.error')
+                   // alert(JSON.stringify(err))
+                    console.log('wx err', err);
+                    //可以更新签名
+                });
+
+            }, err => {
+
+               // alert(JSON.stringify(err))
+            });
+        },
         hack() {
             // this.audioShowContral(true);
             this.$store.dispatch({
@@ -249,19 +292,19 @@ export default {
         playByLocate(pos, auto) {
 
             if (((113.406814 < pos[0] && pos[0] < 113.407822) && (23.019997 < pos[1] && pos[1] < 23.021636))) {
-                if (this.audio.id == 'dormitory' || this.playing ) {
+                if (this.audio.id == 'dormitory' || this.playing) {
                     return
                 }
 
                 this.dispatchPlayById(this, 'dormitory', auto)
             } else if (((113.407539 < pos[0] && pos[0] < 113.409227) && (23.019375 < pos[1] && pos[1] < 23.020442))) {
-                if (this.audio.id == 'lib'  || this.playing) {
+                if (this.audio.id == 'lib' || this.playing) {
                     return
                 }
                 this.dispatchPlayById(this, 'lib', auto)
 
             } else {
-                if (this.audio.id == 'tech'  || this.playing) {
+                if (this.audio.id == 'tech' || this.playing) {
                     return
                 }
                 this.dispatchPlayById(this, 'tech', auto)
@@ -273,24 +316,16 @@ export default {
                 type: 'play',
                 id: id,
             }).then(function (value) {
-                //   that.pause();
-                // that.play();
+
                 that.audioShowContral(true);
-                if (auto) {
-                    that.play();
-                } else {
-                    that.pause();
-                }
+                that.configJssdk()
+
             })
-            that.changeFlesh(false)
 
             that.getSightMessageById(id).then(function (data) {
                 //Object.assign只是浅拷贝
                 var wgs84Sphere = new ol.Sphere(6378137);
                 that.activeOverlayerMessage = Object.assign({ mode: 'auto' }, data);
-
-
-
                 //防止修改原本对象 采用深拷贝
                 let tempdata = JSON.parse(JSON.stringify(data))
                 tempdata.location[1] = tempdata.location[1] - 0.000775;
@@ -403,12 +438,17 @@ export default {
             this.allShow = curVal;
         },
         locating(curVal, oldVal) {
+            // this.configJssdk()
+            this.playByLocate(this.currentPosition, true)
+            this.geofunction()
+            /*
             this.playByLocate(this.currentPosition, true)
             if (curVal) {
                 this.geofunction()
 
             }
-
+           
+*/
         },
         auto(curVal, oldVal) {
             this.autoplay = curVal

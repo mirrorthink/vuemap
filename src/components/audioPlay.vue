@@ -1,9 +1,6 @@
 <template>
   <div id="play-bar">
-    <audio id="music" v-on:ended="onclose" ref="audio" loop>
-  
-      <source v-bind:src="audio.audioUrl" type="audio/mp3">
-    </audio>
+    <audio id="music" v-on:ended="onclose" ref="audio" v-bind:src="audio.audioUrl"> </audio>
     <div class="play-bar-image-container">
       <img class="play-bar-button" v-bind:src="playing?iconPause:iconPlay" @touchend="tapButton" @click="tapButton">
     </div>
@@ -44,9 +41,6 @@ export default {
       duration: '00:00',
       currentTime: '00:00',
       indicatorPosition: 0,
-
-
-
     }
   },
 
@@ -58,7 +52,7 @@ export default {
 
       event && event.preventDefault()
       if (this.playing) {
-        console.log('playing')
+      
         this.pause()
       } else {
         this.play()
@@ -68,7 +62,7 @@ export default {
 
     },
     onclose() {
-      this.pause();
+      this.$refs.audio.pause();
       this.audioShowContral(false);
     },
     formatTime(time) {
@@ -82,77 +76,46 @@ export default {
     ])
   },
   mounted() {
-    // this.duration = parseInt(document.getElementById('music').duration)
-    // this.currentTime = parseInt(document.getElementById('music').currentTime)
-    //  console.log(parseInt(document.getElementById('music').duration))
-    let audio = document.getElementById('music')
-    var that = this;
-
-
-
-    audio.addEventListener('loadstart', () => {
-      console.log(audio.src)
-      if (audio.src && this.playing　) {
+    this.$refs.audio.addEventListener('loadstart', () => {
+      if (this.$refs.audio.src && this.playing　) {
         this.changeLoadingShow(true);
       }
     });
-    audio.addEventListener('loadedmetadata', () => {
-
-
+    this.$refs.audio.addEventListener('loadedmetadata', () => {
     });
-
-
-    audio.addEventListener('canplaythrough', () => {
+    this.$refs.audio.addEventListener('canplaythrough', () => {
 
       this.changeLoadingShow(false);
-      this.duration = this.formatTime(audio.duration);
+      this.duration = this.formatTime(this.$refs.audio.duration);
       // audio.play()
 
     });
-    audio.addEventListener('timeupdate', () => {
-      this.currentTime = this.formatTime(audio.currentTime);
-      this.indicatorPosition = audio.currentTime / audio.duration * 100;
-
-
-
+    this.$refs.audio.addEventListener('timeupdate', () => {
+      this.currentTime = this.formatTime(this.$refs.audio.currentTime);
+      this.indicatorPosition = this.$refs.audio.currentTime / this.$refs.audio.duration * 100;
     });
   },
   watch: {
     playing: function (val) {
-
       if (val) {
 
         var playPromise = this.$refs.audio.play();
         if (playPromise !== undefined) {
           playPromise.then(function () {
-            // Automatic playback started!
           }).catch(function (error) {
-            // Automatic playback failed.
-            // Show a UI element to let the user manually start playback.
             alert(error)
           });
         }
-
       } else {
         this.$refs.audio.pause()
       }
     },
     audio: function (val) {
       if (val) {
+        
         this.$refs.audio.src = val.audioUrl;
-
-
+        console.log(this.$refs.audio.src)
       }
-
-    },
-    simulate: function (val) {
-      if (val) {
-        console.log('tapButton')
-        var state = 'on'
-        this.tapButton(state)
-      }
-
-
     }
   }
 }

@@ -29,6 +29,7 @@ export default {
             },
         }
     },
+
     mounted() {
         this.languageActiveItem.item = this.Messages.item[this.Messages.activeindex];
 
@@ -70,6 +71,7 @@ export default {
                 this.allShow = !this.allShow;
                 this.changetoggleAllShow()
             } else {
+                //自动播放按钮
                 this.languageActiveItem.index = (this.languageActiveItem.index + 1) % 2;
                 this.languageActiveItem.item = this.Messages.item[this.languageActiveItem.index];
                 this.$store.commit({
@@ -79,27 +81,28 @@ export default {
                 })
 
                 if (this.languageActiveItem.index == 1) {
-                    this.changeFlesh(true);
-                    that.$store.dispatch({
-                        type: 'play',
-                        id: 'slient',
-                    }).then(function (value) {
-
-                        that.play();
-                        that.audioShowContral(false);
-
-                    })
-
-                    if (!this.geoErr && !this.notHere) {
-
-                        that.locating(true)
-
-
-                    } else {
-
-                    }
+                    that.locating(true)
+                    /*        this.changeFlesh(true);
+                         that.$store.dispatch({
+                             type: 'play',
+                             id: 'slient',
+                         }).then(function (value) {
+     
+                             that.play();
+                             that.audioShowContral(false);
+     
+                         })
+     
+                         if (!this.geoErr && !this.notHere) {
+     
+                             that.locating(true)
+     
+     
+                         } else {
+     
+                         }*/
                 } else {
-                    
+
                 }
             }
         },

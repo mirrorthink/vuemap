@@ -4,7 +4,7 @@
 //全局样式
 import './assets/iconfont/iconfont.css'
 import './style/common.css'
-
+import VueResource from 'vue-resource'
 import Vue from 'vue'
 import App from './App'
 import routes from './router'
@@ -24,7 +24,7 @@ let routeRection = new Vue()
 
 Vue.use(VueAwesomeSwiper)
 Vue.use(VueRouter)
-
+Vue.use(VueResource)
 Vue.use(VueLazyload, {
   error: '/static/img/error.svg',
   loading: '/static/img/loading.svg',
