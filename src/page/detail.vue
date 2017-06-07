@@ -5,11 +5,13 @@
                 <swiper-slide v-for="slide in swiperImg" :key="slide.backgroundImage" v-bind:style="slide" v-on:imgChange="imgChange($event)"></swiper-slide>
                 <div class="swiper-pagination" slot="pagination"></div>
             </swiper>
-            <div class="video">
+            <div class="video" v-if="message.video" v-on:click="navVideo">
+    
                 <img src="/static/img/video@3x.png" />
+    
             </div>
             <div class="languages" v-bind:class="{ allactive: allShow}">
-                <toggleBar v-bind:Messages="languageMessages" ></toggleBar>
+                <toggleBar v-bind:Messages="languageMessages"></toggleBar>
             </div>
             <div class="count">
                 <span id="activeIndex">0</span>/{{totle}}</div>
@@ -110,7 +112,8 @@ export default {
                 'id': '',
                 'title': '',
                 'dec': '',
-                'location': []
+                'location': [],
+                'video':''
             },
             distant: ''
         }
@@ -129,17 +132,9 @@ export default {
         this.getSightMessageById(id).then(function (data) {
             that.message = data;
             that.distant = computDistant(data.location, that.currentPosition)
-
-
-        })
-        /*
-        this.$store.dispatch({
-            type: 'play',
-            id: this.$route.params.id,
+            document.title = data.title;
         })
 
-        this.audioShowContral(true);
-*/
     },
 
 
@@ -154,6 +149,10 @@ export default {
     methods: {
         imgChange(event) {
             this.activeIndex = event;
+
+        },
+        navVideo() {
+            this.$router.push({ name: 'video', params: { id: this.message.id } })
 
         },
         playaudio() {
@@ -175,7 +174,7 @@ export default {
         },
 
         ...mapMutations(['audioShowContral', 'play', 'pause']),
-  
+
         ...mapActions([
             'getSightMessageById' // 
         ]),
@@ -195,9 +194,10 @@ export default {
 
 
 <style lang="less">
-.container{
+.container {
     background: #fff;
 }
+
 .photoConstainer {
     width: 100%;
     height: 26.79rem;
@@ -325,7 +325,7 @@ export default {
             }
         }
     }
-    .content{
+    .content {
         line-height: 1.62rem;
         margin-bottom: 3.43rem;
     }

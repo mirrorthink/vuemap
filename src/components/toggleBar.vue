@@ -82,25 +82,6 @@ export default {
 
                 if (this.languageActiveItem.index == 1) {
                     that.locating(true)
-                    /*        this.changeFlesh(true);
-                         that.$store.dispatch({
-                             type: 'play',
-                             id: 'slient',
-                         }).then(function (value) {
-     
-                             that.play();
-                             that.audioShowContral(false);
-     
-                         })
-     
-                         if (!this.geoErr && !this.notHere) {
-     
-                             that.locating(true)
-     
-     
-                         } else {
-     
-                         }*/
                 } else {
 
                 }

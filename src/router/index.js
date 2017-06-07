@@ -39,6 +39,10 @@ export default [{
             name: 'panoramic',
             component: r => require.ensure([], () => r(require('../page/panoramic')), 'panoramic')
         },
-
+        {
+            path: '/video/:id',
+            name: 'video',
+            component: r => require.ensure([], () => r(require('../page/video')), 'video')
+        },
     ]
 }]

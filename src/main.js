@@ -43,7 +43,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   setTimeout(() => {
    // let transitions = !from.name ? '' : ((from.name == 'home') || (from.name == 'sightList' && to.name != 'home' ) ) ? 'slide-right' : '';
-       let transitions =  ((from.name == 'home') || (from.name == 'sightList' && to.name != 'home' )  ) ? 'slide-right' : (to.name == 'home' || (to.name == 'sightList' && from.name != 'home' )) ? 'slide-left' :'';
+       let transitions =  ((from.name == 'home')  ) ? 'slide-right' : (to.name == 'home' ) ? 'slide-left' :'';
 
 
     console.log(transitions)

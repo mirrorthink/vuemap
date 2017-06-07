@@ -80,10 +80,13 @@ export default {
       if (this.$refs.audio.src && this.playing　) {
         this.changeLoadingShow(true);
       }
+  
+
     });
     this.$refs.audio.addEventListener('loadedmetadata', () => {
     });
     this.$refs.audio.addEventListener('canplaythrough', () => {
+   
 
       this.changeLoadingShow(false);
       this.duration = this.formatTime(this.$refs.audio.duration);

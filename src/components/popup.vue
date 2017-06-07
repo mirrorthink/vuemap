@@ -18,8 +18,17 @@
         <div class="content">
             <div class="left">
                 <div class="img" v-bind:class="{ small: message.mode == 'auto' }">
-                    <img :src="message.imgurl" alt="">
+                    <img :src="message.imgurl" alt="" class="bg">
+    
                 </div>
+                <div class="videoHolder" v-bind:class="{ small: message.mode == 'auto' }">
+                    <div class="video" v-on:click="navVideo">
+    
+                        <img src="/static/img/video@3x.png" alt="" v-if="message.video">
+    
+                    </div>
+                </div>
+    
             </div>
             <div class="right">
                 <div class="detail" v-substr="message.mode == 'auto' ?  25 : 50"> {{message.dec}}</div>
@@ -125,6 +134,10 @@ export default {
             this.$router.push({ name: 'detail', params: { id: this.message.id } })
 
         },
+        navVideo() {
+            this.$router.push({ name: 'video', params: { id: this.message.id } })
+
+        },
         playaudio() {
             this.pause();
             this.audioShowContral(true);
@@ -210,6 +223,7 @@ export default {
         display: flex;
         justify-content: space-between;
         margin-bottom: 0.7rem;
+        position: relative;
         .left {
             margin-right: 1.14rem;
             .img {
@@ -219,9 +233,27 @@ export default {
                     width: 2.86rem!important;
                     height: 2.86rem!important;
                 }
-                img {
+                img.bg {
                     width: 100%;
                     height: 100%;
+                }
+            }
+            .videoHolder {
+                width: 6.29rem;
+                height: 6.29rem;
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                div.video {
+                    width: 2.57rem;
+                    height: 2.57rem;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                    }
                 }
             }
         }

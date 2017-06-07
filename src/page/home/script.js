@@ -20,6 +20,7 @@ export default {
                 type: Object,
                 default: {}
             },
+            ua: null,
             activeOverlayerMessage: null,
             loadingShow: false,
             popupShow: false,
@@ -61,6 +62,7 @@ export default {
         }
     },
     created() {
+        this.isMobile();
         this.view = new ol.View({
             zoom: 18,
             center: this.center, //地图中心
@@ -85,65 +87,36 @@ export default {
             this.layerTogleShow('sight', true)
         })
         ///jssdk
-
-
-
-
-
-
     },
 
     mounted() {
-
+        //just test
         this.$http.get('https://notifysystem.trade:3001/backend/personinfo').then(response => {
-           // alert(JSON.stringify(response))
-
         }, err => {
-
-          //  alert(JSON.stringify(err))
         });
         this.musicPlay = document.getElementById('music');
-
-        //点击弹框事件，原始方式
-        //  this.holder= document.getElementById("overlayerHolder");
         var that = this;
+        //点击弹框事件，原始方式,神奇的setTimeout 之后才可获取到
+
         setTimeout(() => {
             var lable = document.querySelectorAll('.lable');
 
             for (let i = 0; i < lable.length; i++) {
                 lable[i].addEventListener('click', function (event) {
-
-                    that.getSightMessageById(event.target.id).then(function (data) {
-                        //Object.assign只是浅拷贝
-                        var wgs84Sphere = new ol.Sphere(6378137);
-                        that.activeOverlayerMessage = Object.assign({}, data);
-
-
-
-                        //防止修改原本对象 采用深拷贝
-                        let tempdata = JSON.parse(JSON.stringify(data))
-                        tempdata.location[1] = tempdata.location[1] - 0.000775;
-                        let posme = ol.proj.transform(tempdata.location, 'EPSG:4326', 'EPSG:3857');
-                        that.view.setCenter(posme);
-                        that.view.setZoom(18);
-                        that.popupShow = true;
-
-                    })
-                    //that.view.setCenter(posme)
+                    that.haddleActiveOverlayerMessageById(event.target.id, 'click')
                 }, true)
             }
 
-
         }, 1000)
+        //获取坐标用
         this.map.on("click", (e) => {
             e.stopPropagation()
             let coordinate = e.coordinate;
             let lc = ol.coordinate.toStringXY(ol.proj.transform(coordinate, 'EPSG:3857', 'EPSG:4326'), 6);
-            console.log(lc)
+            //  console.log(lc)
         });
         this.creatMeMarker();
         this.map.setTarget(this.$refs.map.id)
-
         this.geolocation = new ol.Geolocation(({
             projection: 'EPSG:3857',
             trackingOptions: {
@@ -153,44 +126,49 @@ export default {
             }
         }));
         this.geofunction();
+        //
+        this.createPopupOverlay()
 
-        this.overlay = new ol.Overlay(({
-            element: this.$refs.popupElement,
-            autoPan: true,
-            autoPanAnimation: {
-                duration: 250
-            }
-        }));
-        this.map.addOverlay(this.overlay);
     },
     computed: mapState(['languageMessages', 'languagemode', 'popupContent', 'geoErr', 'notHere', 'audioShow', 'allShow', 'auto', 'playing', 'locating', 'audio', 'flesh']),
 
     methods: {
+        createPopupOverlay() {
+            this.overlay = new ol.Overlay(({
+                element: this.$refs.popupElement,
+                autoPan: true,
+                autoPanAnimation: {
+                    duration: 250
+                }
+            }));
+            this.map.addOverlay(this.overlay);
+        },
         configJssdk() {
             var param = {
                 debug: true,
                 jsApiList: ['playVoice', 'pauseVoice', 'stopVoice', 'onVoicePlayEnd'],
                 url: 'https://www.notifysystem.trade'
             };
-            this.$http.get('https://notifysystem.trade:3001/backend/JsConfig',{param:param}).then(response => {
+            var that=this;
+            this.$http.get('https://notifysystem.trade:3001/backend/JsConfig', { param: param }).then(response => {
                 console.log(response)
                 wx.config(response.data);
                 wx.ready(() => {
                     console.log('wx.ready')
                     //alert('wx.ready')
-                    document.getElementById('music').play();
+                    that.play();
                 });
                 wx.error(function (err) {
                     console.log(JSON.stringify(err))
                     //alert('wx.error')
-                   // alert(JSON.stringify(err))
+                    // alert(JSON.stringify(err))
                     console.log('wx err', err);
                     //可以更新签名
                 });
 
             }, err => {
 
-               // alert(JSON.stringify(err))
+                // alert(JSON.stringify(err))
             });
         },
         hack() {
@@ -265,7 +243,7 @@ export default {
                     that.setCenterFlag && that.view.setCenter(posme)
                     that.setCenterFlag = false;
                     if (that.autoplay) {
-                        that.playByLocate(pos)
+                        that.playByLocate(pos, that.ua)
                     }
                 }
 
@@ -289,43 +267,51 @@ export default {
 
             });
         },
-        playByLocate(pos, auto) {
+        playByLocate(pos, ua) {
 
             if (((113.406814 < pos[0] && pos[0] < 113.407822) && (23.019997 < pos[1] && pos[1] < 23.021636))) {
                 if (this.audio.id == 'dormitory' || this.playing) {
                     return
                 }
 
-                this.dispatchPlayById(this, 'dormitory', auto)
+                this.dispatchPlayById(this, 'dormitory', ua)
             } else if (((113.407539 < pos[0] && pos[0] < 113.409227) && (23.019375 < pos[1] && pos[1] < 23.020442))) {
                 if (this.audio.id == 'lib' || this.playing) {
                     return
                 }
-                this.dispatchPlayById(this, 'lib', auto)
+                this.dispatchPlayById(this, 'lib', ua)
 
             } else {
                 if (this.audio.id == 'tech' || this.playing) {
                     return
                 }
-                this.dispatchPlayById(this, 'tech', auto)
+                this.dispatchPlayById(this, 'tech', ua)
 
             }
         },
-        dispatchPlayById(that, id, auto) {
+        dispatchPlayById(that, id, ua) {
             that.$store.dispatch({
                 type: 'play',
                 id: id,
             }).then(function (value) {
 
                 that.audioShowContral(true);
-                that.configJssdk()
-
+                if (ua=='mobile'){
+                    that.configJssdk()
+                }else{
+                    that.play();
+                }
             })
 
-            that.getSightMessageById(id).then(function (data) {
+            that.haddleActiveOverlayerMessageById(id, 'auto')
+        },
+
+        haddleActiveOverlayerMessageById(id, mode) {
+            var that = this;
+            this.getSightMessageById(id).then(function (data) {
                 //Object.assign只是浅拷贝
                 var wgs84Sphere = new ol.Sphere(6378137);
-                that.activeOverlayerMessage = Object.assign({ mode: 'auto' }, data);
+                that.activeOverlayerMessage = Object.assign({ mode: mode }, data);
                 //防止修改原本对象 采用深拷贝
                 let tempdata = JSON.parse(JSON.stringify(data))
                 tempdata.location[1] = tempdata.location[1] - 0.000775;
@@ -419,6 +405,14 @@ export default {
             this.layerTogleShow($event.type, $event.state)
 
         },
+        isMobile() {
+            let userAgentInfo = window.navigator.userAgent;
+            let Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"]
+            // return Agents.find(agent => userAgentInfo.indexOf(agent) !== -1)
+            Agents.find(agent => userAgentInfo.indexOf(agent) !== -1) ? (this.ua = 'mobile') : (this.ua = 'pc');
+
+
+        },
         ...mapActions([
             'getSightMessageById', 'getlayerMessage' // 
         ]),
@@ -439,8 +433,12 @@ export default {
         },
         locating(curVal, oldVal) {
             // this.configJssdk()
-            this.playByLocate(this.currentPosition, true)
+
+
+            this.playByLocate(this.currentPosition, this.ua)
             this.geofunction()
+
+
             /*
             this.playByLocate(this.currentPosition, true)
             if (curVal) {
