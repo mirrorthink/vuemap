@@ -83,6 +83,7 @@ export default {
                 if (this.languageActiveItem.index == 1) {
                     that.locating(true)
                 } else {
+                   
 
                 }
             }
@@ -97,12 +98,19 @@ export default {
                 name: this.Messages.name,
                 activeindex: index,
             })
+            if (this.Messages.name == 'languageMessages') {
+                this.$emit('changelanguageMessages');
+               // this.changeSightMessageByLangeageMode()
+            }
 
 
         },
         ...mapMutations([
             'changetoggleAllShow', 'play', 'audioShowContral', 'locating', 'pause', 'changeFlesh'
-        ])
+        ]),
+        ...mapActions([
+             'getlayerMessage','changeSightMessageByLangeageMode'
+        ]),
     },
     computed: mapState(['geoErr', 'notHere', 'currentPosition']),
 

@@ -15,6 +15,7 @@ html {
   box-sizing:border-box;
   font-size: 1rem;
   color:#7A7A7F;
+word-spacing:1px;
 }
 body {
   margin: 0;
@@ -585,12 +586,15 @@ template {
 }*/
 
 .lable {
+  display: inline-block;
   padding:0.5rem 1rem 0.5rem 2.7rem;
   background:rgba(255,255,255,1);
   position: relative;
   border-radius: 0.3rem;
   border: none;
   min-width: 8rem;
+  max-width: 15rem;
+
   font-size: 1rem;
   color:#7A7A7F ;
   

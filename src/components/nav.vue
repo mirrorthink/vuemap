@@ -1,17 +1,17 @@
 <template>
     <div class="holder">
     
-        <div class="item" v-for="(message,index) in navMessages" @touchend.stop.prevent="show(index)" @click="show(index)" >
+        <div class="item" v-for="(message,index) in navMessages" @touchend.stop.prevent="show(index)" @click="show(index)">
             <span class="icon">
                 <img v-lazy="message.icon" alt="">
                 <span class="cover" v-bind:class="{ active: message.show }"></span>
             </span>
-            <span class="title">{{message.item}}</span>
+            <span class="title">{{message.item[activeLanguage]}}</span>
         </div>
     </div>
 </template>
 <script>
-
+import { mapState } from 'vuex';
 export default {
     name: 'mynav',
 
@@ -19,7 +19,12 @@ export default {
         return {
             navMessages: [
                 {
-                    "item": "路线",
+                    "item": {
+
+                        'chiness': '路线',
+                        'english': 'route'
+
+                    },
                     "icon": '/static/img/luxian.png',
                     'show': false,
                     'layer': 'routeLayer',
@@ -27,14 +32,26 @@ export default {
 
                 },
                 {
-                    "item": "景点",
+
+                    "item": {
+
+                        'chiness': '景点',
+                        'english': 'sight'
+
+                    },
                     "icon": '/static/img/int_jingdian@2x.png',
                     'show': true,
                     'layer': 'sightLayer',
                     'type': 'sight',
                 },
                 {
-                    "item": "厕所",
+
+                    "item": {
+
+                        'chiness': '厕所',
+                        'english': 'wc'
+
+                    },
                     "icon": '/static/img/int_WC@2x.png',
                     'show': false,
                     'layer': 'wcLayer',
@@ -42,14 +59,26 @@ export default {
 
                 },
                 {
-                    "item": "餐饮",
+
+                    "item": {
+
+                        'chiness': '餐饮',
+                        'english': 'food'
+
+                    },
                     "icon": '/static/img/int_eat@2x.png',
                     'show': false,
                     'layer': 'foodLayer',
                     'type': 'food',
                 },
                 {
-                    "item": "停车场",
+
+                    "item": {
+
+                        'chiness': '停车场',
+                        'english': 'park'
+
+                    },
                     "icon": '/static/img/int_Park@2x.png',
                     'show': false,
                     'class': 'jingqu',
@@ -58,14 +87,26 @@ export default {
                 },
 
                 {
-                    "item": "车站",
+
+                    "item": {
+
+                        'chiness': '车站',
+                        'english': 'stop'
+
+                    },
                     "icon": '/static/img/int_bus@2x.png',
                     'show': false,
                     'layer': 'stopLayer',
                     'type': 'stop',
                 },
                 {
-                    "item": "全景点",
+
+                    "item": {
+
+                        'chiness': '全景点',
+                        'english': 'pano'
+
+                    },
                     "icon": '/static/img/int_360@2x.png',
                     "url": "",
                     'show': false,
@@ -73,7 +114,13 @@ export default {
                     'type': 'panoramic',
                 },
                 {
-                    "item": "其他",
+
+                    "item": {
+
+                        'chiness': '其他',
+                        'english': 'other'
+
+                    },
                     "icon": '/static/img/int_other@2x.png',
                     "url": "",
                     'show': false,
@@ -91,6 +138,7 @@ export default {
     created: function () {
 
     },
+    computed: mapState([ 'activeLanguage']),
     methods: {
         show(index) {
             this.navMessages[index].show = !this.navMessages[index].show;
@@ -101,15 +149,16 @@ export default {
         }
     },
 
+
 }
 </script>
 
 
 <style scoped lang="less">
 .holder {
-   // display: flex;
-   // justify-content: center;
-   // align-items: center;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
     //flex-wrap: wrap;
     padding: 0.86rem 1.07rem;
     width: 19.43rem;
@@ -124,7 +173,7 @@ export default {
         border: 0.6rem solid transparent;
         border-top-color: #FFF;
         position: absolute;
-        right:15%;
+        right: 15%;
         bottom: -1.1rem;
     }
     .item {
@@ -146,9 +195,8 @@ export default {
             img {
                 width: 100%;
                 height: 100%;
-
             }
-            .cover{
+            .cover {
                 position: absolute;
                 top: 0px;
                 left: 0px;
@@ -157,8 +205,8 @@ export default {
                 display: block;
 
                 background: rgba(255, 255, 255, 0.5);
-                &.active{
-                   background: rgba(255, 255, 255, 0)!important;
+                &.active {
+                    background: rgba(255, 255, 255, 0)!important;
                 }
             }
         }

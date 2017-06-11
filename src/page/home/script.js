@@ -7,6 +7,7 @@ import mynav from '../../components/nav'
 import loading from '../../components/loading'
 import audioplay from '../../components/audioPlay'
 import wx from 'weixin-js-sdk'
+import { isMobile } from '../../services/Global'
 export default {
     name: 'hello',
     components: {
@@ -20,6 +21,7 @@ export default {
                 type: Object,
                 default: {}
             },
+            lable: null,
             ua: null,
             activeOverlayerMessage: null,
             loadingShow: false,
@@ -32,7 +34,7 @@ export default {
             layer1: new ol.layer.Tile({
                 source: new ol.source.XYZ({
                     url: "https://notifysystem.trade/jnu/{z}/{x}-{y}.jpg"
-                    // url: "http://localhost:9096/jnu/{z}/{x}-{y}.jpg"
+                   // url: "http://localhost:9096/jnu/{z}/{x}-{y}.jpg"
                 })
             }),
             layer2: new ol.layer.Tile({
@@ -59,10 +61,19 @@ export default {
             geoMessage: '',
             activeIconMessage: {},
             autoplay: false,
+
+            navWord: {
+                'chiness': ['定位', '所有景点', '兴趣点'],
+                'english': ['Location', 'Sight', 'Navigation']
+            },
+            geoWord: {
+                'chiness': ['正在获取定位', '继续浏览', '导航到此', '检测到你不在区域范围内', '无法获取你的地理位置'],
+                'english': ['Locating', 'Go on', 'Navigate to here', 'You are not in the area', 'Can not get your location']
+            }
         }
     },
     created() {
-        this.isMobile();
+
         this.view = new ol.View({
             zoom: 18,
             center: this.center, //地图中心
@@ -91,6 +102,9 @@ export default {
 
     mounted() {
         //just test
+
+
+
         this.$http.get('https://notifysystem.trade:3001/backend/personinfo').then(response => {
         }, err => {
         });
@@ -99,15 +113,17 @@ export default {
         //点击弹框事件，原始方式,神奇的setTimeout 之后才可获取到
 
         setTimeout(() => {
-            var lable = document.querySelectorAll('.lable');
 
-            for (let i = 0; i < lable.length; i++) {
-                lable[i].addEventListener('click', function (event) {
+            this.lable = document.querySelectorAll('.lable');
+            this.changelanguageMessages();
+
+            for (let i = 0; i < this.lable.length; i++) {
+                this.lable[i].addEventListener('click', function (event) {
                     that.haddleActiveOverlayerMessageById(event.target.id, 'click')
                 }, true)
             }
 
-        }, 1000)
+        }, 10)
         //获取坐标用
         this.map.on("click", (e) => {
             e.stopPropagation()
@@ -129,10 +145,18 @@ export default {
         //
         this.createPopupOverlay()
 
+
     },
-    computed: mapState(['languageMessages', 'languagemode', 'popupContent', 'geoErr', 'notHere', 'audioShow', 'allShow', 'auto', 'playing', 'locating', 'audio', 'flesh']),
+    computed: mapState(['activeLanguage', 'languageMessages', 'languagemode', 'geoErr', 'notHere', 'audioShow', 'allShow', 'auto', 'playing', 'locating', 'audio', 'flesh']),
 
     methods: {
+        setSightLayer() {
+            this.getlayerMessage('sight').then((data) => {
+                this.setlayer(data);
+
+                this.layerTogleShow('sight', true)
+            })
+        },
         createPopupOverlay() {
             this.overlay = new ol.Overlay(({
                 element: this.$refs.popupElement,
@@ -149,7 +173,7 @@ export default {
                 jsApiList: ['playVoice', 'pauseVoice', 'stopVoice', 'onVoicePlayEnd'],
                 url: 'https://www.notifysystem.trade'
             };
-            var that=this;
+            var that = this;
             this.$http.get('https://notifysystem.trade:3001/backend/JsConfig', { param: param }).then(response => {
                 console.log(response)
                 wx.config(response.data);
@@ -170,6 +194,32 @@ export default {
 
                 // alert(JSON.stringify(err))
             });
+        },
+        changelanguageMessages() {
+            let lableArr = [...this.lable];
+
+            let lableWithoutSightArr = lableArr.forEach((item) => {
+
+                let type = item.className.substring(6)
+                if (type != 'sight') {
+                    this.getIconLanByType(type).then((data) => {
+                        item.innerHTML = data
+
+                    })
+                } else {
+                    this.getSightIconLanByID(item.id).then((data) => {
+                        item.innerHTML = data
+
+                    })
+                }
+
+
+
+            });
+
+
+
+
         },
         hack() {
             // this.audioShowContral(true);
@@ -229,7 +279,7 @@ export default {
                 //TODO
                 if (!((113.405543 < pos[0] && pos[0] < 113.413496) && (23.016377 < pos[1] && pos[1] < 23.024988))) {
 
-                    that.geoMessage = '检测到你不在区域范围内';
+                    that.geoMessage = that.geoWord[that.activeLanguage][3]
                     that.geolocation.setTracking(false);
                     // console.log(that.notHere())
                     // that.notHerefun();
@@ -258,7 +308,7 @@ export default {
                 console.log('geoerror')
 
 
-                that.geoMessage = '无法获取你的地理位置';
+                that.geoMessage = that.geoWord[that.activeLanguage][4]
                 that.$store.commit({
                     type: 'geoErrfun',
                     state: true,
@@ -269,20 +319,21 @@ export default {
         },
         playByLocate(pos, ua) {
 
+
             if (((113.406814 < pos[0] && pos[0] < 113.407822) && (23.019997 < pos[1] && pos[1] < 23.021636))) {
-                if (this.audio.id == 'dormitory' || this.playing) {
+                if (this.audio.id == 'dormitory' ) {
                     return
                 }
 
                 this.dispatchPlayById(this, 'dormitory', ua)
             } else if (((113.407539 < pos[0] && pos[0] < 113.409227) && (23.019375 < pos[1] && pos[1] < 23.020442))) {
-                if (this.audio.id == 'lib' || this.playing) {
+                if (this.audio.id == 'lib') {
                     return
                 }
                 this.dispatchPlayById(this, 'lib', ua)
 
             } else {
-                if (this.audio.id == 'tech' || this.playing) {
+                if (this.audio.id == 'tech' ) {
                     return
                 }
                 this.dispatchPlayById(this, 'tech', ua)
@@ -296,9 +347,10 @@ export default {
             }).then(function (value) {
 
                 that.audioShowContral(true);
-                if (ua=='mobile'){
+
+                if (ua) {
                     that.configJssdk()
-                }else{
+                } else {
                     that.play();
                 }
             })
@@ -309,6 +361,7 @@ export default {
         haddleActiveOverlayerMessageById(id, mode) {
             var that = this;
             this.getSightMessageById(id).then(function (data) {
+
                 //Object.assign只是浅拷贝
                 var wgs84Sphere = new ol.Sphere(6378137);
                 that.activeOverlayerMessage = Object.assign({ mode: mode }, data);
@@ -344,12 +397,7 @@ export default {
                 // console.log(this.styles)
                 for (let i = 0, len = data.length; i < len; i++) {
                     var pos = ol.proj.transform(data[i].location, 'EPSG:4326', 'EPSG:3857');
-                    /*
-                                        let feature1 = new ol.Feature({
-                                            geometry: new ol.geom.Point(pos),
-                                        });
-                                        feature1.setStyle(this.styles[styleindex]);
-                                        feature1.setId(data[i].id);*/
+
                     var lable = document.createElement("span");
 
                     //  this.holder.appendChild(lable);
@@ -405,16 +453,9 @@ export default {
             this.layerTogleShow($event.type, $event.state)
 
         },
-        isMobile() {
-            let userAgentInfo = window.navigator.userAgent;
-            let Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"]
-            // return Agents.find(agent => userAgentInfo.indexOf(agent) !== -1)
-            Agents.find(agent => userAgentInfo.indexOf(agent) !== -1) ? (this.ua = 'mobile') : (this.ua = 'pc');
 
-
-        },
         ...mapActions([
-            'getSightMessageById', 'getlayerMessage' // 
+            'getSightMessageById', 'getlayerMessage', 'changeSightMessageByLangeageMode', 'getIconLanByType', 'getSightIconLanByID'// 
         ]),
         ...mapMutations(['audioShowContral', 'play', 'pause', 'simulate', 'changeCurrentPosition', 'changeFlesh'])
 
@@ -434,24 +475,11 @@ export default {
         locating(curVal, oldVal) {
             // this.configJssdk()
 
-
-            this.playByLocate(this.currentPosition, this.ua)
+            var boolen = isMobile();
+            this.playByLocate(this.currentPosition, boolen)
             this.geofunction()
 
-
-            /*
-            this.playByLocate(this.currentPosition, true)
-            if (curVal) {
-                this.geofunction()
-
-            }
-           
-*/
         },
-        auto(curVal, oldVal) {
-            this.autoplay = curVal
-
-        }
     },
     destroyed() {
         this.audioShowContral(false)

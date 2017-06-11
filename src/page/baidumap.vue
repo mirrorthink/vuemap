@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <loading v-if="loadingShow"></loading>
+        <loading v-once v-if="loadingShow"></loading>
         <div class="map" ref="map">
     
         </div>

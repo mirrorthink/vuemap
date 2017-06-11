@@ -46,8 +46,25 @@ export const Direct = {
     },
     {
       name: 'substr',
-      update: (el,binding) => {
-        el.innerHTML=el.innerHTML.substring(0,binding.value)+"..."
+      update: (el, binding) => {
+
+        var reg = /[\u4E00-\u9FA5\uF900-\uFA2D]/;
+        var isChiness = reg.test(el.innerHTML);
+        if (el.innerHTML.length > binding.value) {
+          if (isChiness) {
+            console.log('China')
+            el.innerHTML = el.innerHTML.substring(0, binding.value) + "..."
+          } else {
+            console.log('noChina')
+            el.innerHTML = el.innerHTML.substring(0, binding.value * 2) + "..."
+
+          }
+        } else {
+           return
+        }
+
+
+
       }
     }
   ],

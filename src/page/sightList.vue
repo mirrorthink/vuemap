@@ -19,25 +19,28 @@ export default {
     name: 'sightList',
     components: {
         popup,
- 
+
         audioplay
     },
     data() {
         return {
-            view: null
+            sightMessages: [],
         }
     },
     mounted() {
 
-        document.title = '景点详情'
-
+        document.title = '景点详情',
+            this.getSightMessage().then((data)=>{
+                this.sightMessages=data;
+            } )
     },
-    computed: mapState(['sightMessages', 'audioShow']),
+    computed: mapState(['audioShow']),
     methods: {
         close() {
 
         },
-        ...mapMutations(['audioShowContral'])
+        ...mapMutations(['audioShowContral']),
+        ...mapActions(['getSightMessage'])
 
     },
     beforeDestroy() {

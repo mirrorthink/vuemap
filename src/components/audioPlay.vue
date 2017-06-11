@@ -8,18 +8,20 @@
       <h5> {{audio.title}}</h5>
       <p> {{currentTime}}/{{duration}}</p>
     </div>
-  
+    <div class="loading">
+      <img src="/static/img/loading.gif" v-if="loading" />
+    </div>
     <div class="duration">
       <span v-bind:style="{left:indicatorPosition+'%'}"></span>
     </div>
     <div class="close" @touchend.prevent.stop="onclose" v-on:click="onclose">
-      <img src='/static/img/vioce_close@3x.png'>
+      <img src='/static/img/vioce_close@3x.png' />
     </div>
-  
   </div>
 </template>
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
+import { formatTime } from '../services/Global'
 
 export default {
   name: 'audioplay',
@@ -41,6 +43,7 @@ export default {
       duration: '00:00',
       currentTime: '00:00',
       indicatorPosition: 0,
+      loading:true,
     }
   },
 
@@ -52,7 +55,7 @@ export default {
 
       event && event.preventDefault()
       if (this.playing) {
-      
+
         this.pause()
       } else {
         this.play()
@@ -65,37 +68,36 @@ export default {
       this.$refs.audio.pause();
       this.audioShowContral(false);
     },
-    formatTime(time) {
-      let s = (parseInt(time) % 60) > 9 ? (parseInt(time) % 60) : '0' + (parseInt(time) % 60);
 
-      let m = parseInt(parseInt(time) / 60) > 9 ? parseInt(parseInt(time) / 60) : '0' + parseInt(parseInt(time) / 60);
-      return m + ':' + s;
-    },
     ...mapMutations([
       'play', 'pause', 'changeLoadingShow', 'audioShowContral'
     ])
   },
   mounted() {
     this.$refs.audio.addEventListener('loadstart', () => {
-      if (this.$refs.audio.src && this.playing　) {
-        this.changeLoadingShow(true);
-      }
-  
+    
+
 
     });
     this.$refs.audio.addEventListener('loadedmetadata', () => {
     });
     this.$refs.audio.addEventListener('canplaythrough', () => {
-   
 
-      this.changeLoadingShow(false);
-      this.duration = this.formatTime(this.$refs.audio.duration);
+
+      this.loading=false;
+      if (this.$refs.audio) {
+        this.duration = formatTime(this.$refs.audio.duration);
+      }
+
       // audio.play()
 
     });
     this.$refs.audio.addEventListener('timeupdate', () => {
-      this.currentTime = this.formatTime(this.$refs.audio.currentTime);
-      this.indicatorPosition = this.$refs.audio.currentTime / this.$refs.audio.duration * 100;
+      if (this.$refs.audio) {
+        this.currentTime = formatTime(this.$refs.audio.currentTime);
+        this.indicatorPosition = this.$refs.audio.currentTime / this.$refs.audio.duration * 100;
+      }
+
     });
   },
   watch: {
@@ -115,7 +117,7 @@ export default {
     },
     audio: function (val) {
       if (val) {
-        
+
         this.$refs.audio.src = val.audioUrl;
         console.log(this.$refs.audio.src)
       }
@@ -155,8 +157,7 @@ export default {
 .play-bar-text {
 
   padding-left: 1rem;
-  cursor: pointer;
-  margin-right: 2rem;
+  cursor: pointer; // margin-right: 2rem;
   h5 {
     font-size: 0.86rem;
     text-align: left;
@@ -165,6 +166,18 @@ export default {
   }
   p {
     font-size: 0.71rem;
+  }
+}
+
+.loading {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img {
+    width: 40%;
+    height: 40%;
   }
 }
 

@@ -9,6 +9,10 @@ export default {
 		} else {
 			state.auto = false;
 		}
+		if (key == 'languageMessages') {
+			state.activeLanguage = state[key].language[payload.activeindex]
+		}
+
 
 	},
 	notHerefun(state, payload) {
@@ -46,6 +50,10 @@ export default {
 	},
 	changeFlesh(state, payload) {
 		state.flesh = payload;
-	}
+	},
+	changeActiveLanguage(state, payload) {
+		console.log(payload)
+		state.activeLanguage = payload;
+	},
 
 }
