@@ -107,7 +107,7 @@ export default {
     width: 100%;
     .content {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         margin-bottom: 0.7rem;
         position: relative;
         width: 100%;
@@ -145,7 +145,7 @@ export default {
             }
         }
         .right {
-           min-width: 15.29rem;
+          // min-width: 15.29rem;
             .detail {
                 line-height: 1.62rem;
                 position: relative;

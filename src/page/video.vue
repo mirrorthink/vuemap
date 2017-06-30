@@ -1,7 +1,15 @@
 <template>
     <div class="container">
         <div class="videoConstainer">
-            <video ref="video" :src="message.video" width="100%" @mouseover="tapScreen" @mouseout="nottapScreen" controls></video>
+          
+            <video id="video" width="100%" controls>
+                <source ref="video" :src="message.video" width="100%" @mouseover="tapScreen" @mouseout="nottapScreen"  type="video/mp4"> 
+                Your browser does not support the video tag.
+            </video>
+    
+
+    
+           <!-- <video ref="video" :src="message.video" width="100%" @mouseover="tapScreen" @mouseout="nottapScreen" controls></video>-->
         </div>
         <div class="wordConstainer">
             <popupHeader :location="message.location" :title="message.title" class="popupHeader"></popupHeader>
@@ -62,29 +70,29 @@ export default {
 
         this.getSightMessageById(id).then(function (data) {
             that.message = data;
-      
+
             document.title = data.title;
 
 
 
         })
-/*
-        this.$refs.video.addEventListener('canplaythrough', () => {
-
-            this.duration = formatTime(this.$refs.video.duration);
-            // audio.play()
-
-        });
-        this.$refs.video.addEventListener('timeupdate', () => {
-            this.currentTime = formatTime(this.$refs.video.currentTime);
-            this.indicatorPosition = this.$refs.video.currentTime / this.$refs.video.duration * 100;
-        });
-
-        this.$refs.video.addEventListener('ended', () => {
-            this.playing = false;
-            this.iconShow = true;
-
-        });*/
+        /*
+                this.$refs.video.addEventListener('canplaythrough', () => {
+        
+                    this.duration = formatTime(this.$refs.video.duration);
+                    // audio.play()
+        
+                });
+                this.$refs.video.addEventListener('timeupdate', () => {
+                    this.currentTime = formatTime(this.$refs.video.currentTime);
+                    this.indicatorPosition = this.$refs.video.currentTime / this.$refs.video.duration * 100;
+                });
+        
+                this.$refs.video.addEventListener('ended', () => {
+                    this.playing = false;
+                    this.iconShow = true;
+        
+                });*/
     },
 
 
