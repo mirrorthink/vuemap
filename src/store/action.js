@@ -1,15 +1,15 @@
 var audiolist = {
-  lib: {
+  ap1: {
     chiness: {
       audioUrl: "/static/mp3/audio5.mp3",
       title: "图书馆"
     },
     english: {
       audioUrl: "/static/mp3/audio5.mp3",
-      title: "library"
+      title: "ap1rary"
     }
   },
-  tech: {
+  ap2: {
     chiness: {
       audioUrl: "/static/mp3/audio2.mp3",
       title: "教学楼"
@@ -19,24 +19,24 @@ var audiolist = {
       title: "Teaching building"
     }
   },
-  dormitory: {
+  ap3: {
     chiness: {
       audioUrl: "/static/mp3/audio3.mp3",
       title: "宿舍"
     },
     english: {
       audioUrl: "/static/mp3/audio3.mp3",
-      title: "dormitory"
+      title: "ap3"
     }
   },
-  canteen: {
+  ap4: {
     chiness: {
       audioUrl: "/static/mp3/audio4.mp3",
       title: "饭堂"
     },
     english: {
       audioUrl: "/static/mp3/audio4.mp3",
-      title: "canteen"
+      title: "ap4"
     }
   },
   slient: {
@@ -52,7 +52,7 @@ var audiolist = {
 };
 var imglist = [
   {
-    id: "lib",
+    id: "ap1",
     imgUrl: [
       "/static/img/img1.jpg",
       "/static/img/img3.jpg",
@@ -60,7 +60,7 @@ var imglist = [
     ]
   },
   {
-    id: "tech",
+    id: "ap2",
     imgUrl: [
       "/static/img/img4.jpg",
       "/static/img/img5.jpg",
@@ -68,7 +68,7 @@ var imglist = [
     ]
   },
   {
-    id: "dormitory",
+    id: "ap3",
     imgUrl: [
       "/static/img/img7.jpg",
       "/static/img/img8.jpg",
@@ -76,7 +76,7 @@ var imglist = [
     ]
   },
   {
-    id: "canteen",
+    id: "ap4",
     imgUrl: [
       "/static/img/img8.jpg",
       "/static/img/img2.jpg",
@@ -86,7 +86,7 @@ var imglist = [
 ];
 var declist = [
   {
-    id: "lib",
+    id: "ap1",
     chiness: {
       title: "南海明珠 ",
       dec:
@@ -99,7 +99,7 @@ var declist = [
     }
   },
   {
-    id: "tech",
+    id: "ap2",
     chiness: {
       title: "长明灯式八大圣迹灵塔",
       dec: `1、迦毘罗卫城蓝毗尼园佛陀降生处。
@@ -124,7 +124,7 @@ var declist = [
     }
   },
   {
-    id: "dormitory",
+    id: "ap3",
     chiness: {
       title: "石质长明灯",
       dec: "以供在佛前昼夜不灭,故名。比喻指引人朝向光明，努力前进，永不休废的慈悲。"
@@ -136,7 +136,7 @@ var declist = [
     }
   },
   {
-    id: "canteen",
+    id: "ap4",
     chiness: {
       title: "八部图案",
       dec: "独角瑞兽、狮子、麒麟"
@@ -158,7 +158,7 @@ var IconlayerMessage = {
   ],
   sight: [
     {
-      id: "lib",
+      id: "ap1",
       title: "图书馆",
       dec:
         "祈福邮局。观音山祈福邮局精巧别致，古色古香；邮局快递的不仅是一份开光物品，更是一份祝福，一份爱心。祈福邮局。观音山祈福邮局精巧别致，古色古香；邮局快递的不仅是一份开光物品，更是一份祝福，一份爱心。祈福邮局。观音山祈福邮局精巧别致，古色古香；邮局快递的不仅是一份开光物品，更是一份祝福，一份爱心。",
@@ -168,7 +168,7 @@ var IconlayerMessage = {
       type: "sight"
     },
     {
-      id: "tech",
+      id: "ap2",
       title: "教学楼",
       location: [113.410195, 23.020654],
       dec:
@@ -178,7 +178,7 @@ var IconlayerMessage = {
       type: "sight"
     },
     {
-      id: "dormitory",
+      id: "ap3",
       title: "宿舍",
       location: [113.407314, 23.020773],
       dec:
@@ -188,7 +188,7 @@ var IconlayerMessage = {
       type: "sight"
     },
     {
-      id: "canteen",
+      id: "ap4",
       title: "饭堂",
       location: [113.41024, 23.021807],
       dec:
@@ -324,7 +324,6 @@ export default {
     return new Promise((resolve, reject) => {
       var poiLayer = {};
       geojsonObject.features.map(item => {
-        console.log(item.properties.Name);
         var type = item.properties.Name;
         if (!poiLayer[type]) {
           poiLayer[type] = [];
@@ -349,12 +348,14 @@ export default {
         //	let filterResult = audiolist.filter(function (item, index, array) {
         //	return (item.id == payload.id);
         //	});
+        console.log(audiolist[payload.id]);
         let filterResult = audiolist[payload.id][state.activeLanguage];
 
         if (filterResult) {
           state.audio = filterResult;
-          console.log(state.audio);
+
           resolve(filterResult);
+          console.log("filterResult" + filterResult);
         } else {
           reject();
         }
@@ -380,7 +381,6 @@ export default {
         }
       } else {
         resolve(IconlayerMessage);
-        console.log(IconlayerMessage);
       }
     });
   },

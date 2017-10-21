@@ -8,7 +8,7 @@ import loading from "@/components/loading";
 import audioplay from "@/components/audioPlay";
 import wx from "weixin-js-sdk";
 import { isMobile } from "@/services/Global";
-import testgeojson from "./testgeojson";
+import { testgeojson, testIPlocate } from "./testgeojson";
 export default {
   components: {
     toggleBar,
@@ -20,6 +20,7 @@ export default {
   data() {
     return {
       state: false,
+      activeAp: null,
       currentPosition: [],
       map: {
         type: Object,
@@ -158,8 +159,26 @@ export default {
         timeout: 600000
       }
     });
+
     this.geofunction();
     //
+    //testIPlocate
+    setInterval(() => {
+      testIPlocate()
+        .then(data => {
+          if (this.activeAp == data) {
+            return;
+          } else {
+            this.activeAp = data;
+            this.playByAp(data);
+          }
+        })
+        .catch(e => {
+          return;
+          console.log(e);
+        });
+    }, 1000);
+
     this.createPopupOverlay();
     testgeojson(ol, this.map);
   },
@@ -245,17 +264,7 @@ export default {
         }
       });
     },
-    hack() {
-      // this.audioShowContral(true)
-      this.$store
-        .dispatch({
-          type: "play",
-          id: "slient"
-        })
-        .then(() => {
-          this.musicPlay.play();
-        });
-    },
+
     goOn() {
       this.state = false;
     },
@@ -282,8 +291,6 @@ export default {
 
       this.geolocation.setTracking(true); // Start position tracking
       this.geolocation.on("change", function() {
-        console.log("geolocation");
-
         var position = that.geolocation.getPosition();
 
         var accuracy = that.geolocation.getAccuracy();
@@ -293,95 +300,42 @@ export default {
         let posme = ol.proj.transform(pos, "EPSG:4326", "EPSG:3857");
 
         that.currentPosition = pos;
-
+        //数据保存到state
         that.changeCurrentPosition(pos);
-        let leftBoundary = 113.520691;
-        let rightBoundary = 113.524044;
-        let topBoundary = 22.319497;
-        let bottomBoundary = 22.316554;
 
-        // TODO
-        if (
-          !(
-            leftBoundary < pos[0] &&
-            pos[0] < rightBoundary &&
-            (bottomBoundary < pos[1] && pos[1] < topBoundary)
-          )
-        ) {
-          that.geoMessage = that.geoWord[that.activeLanguage][3];
-          that.geolocation.setTracking(false);
-          // console.log(that.notHere())
-          // that.notHerefun()
-          that.$store.commit({
-            type: "notHerefun",
-            state: true
-          });
-        } else {
-          // 在区域范围内
-
-          that.setCenterFlag && that.view.setCenter(posme);
-          that.setCenterFlag = false;
-          if (that.autoplay) {
-            that.playByLocate(pos, that.ua);
-          }
-        }
-
+        //暂时放出来
+        that.view.setCenter(posme);
         that.marker.setPosition(posme);
       });
-
-      this.geolocation.on("error", function() {
-        console.log("geoerror");
-
-        that.geoMessage = that.geoWord[that.activeLanguage][4];
-        that.$store.commit({
-          type: "geoErrfun",
-          state: true
-        });
-      });
     },
-    playByLocate(pos, ua) {
-      if (
-        113.406814 < pos[0] &&
-        pos[0] < 113.407822 &&
-        (23.019997 < pos[1] && pos[1] < 23.021636)
-      ) {
-        if (this.audio.id == "dormitory") {
-          return;
-        }
+    playByAp(ap) {
+      var boolen = isMobile();
+      console.log("playByAp");
+      this.dispatchPlayById(this, ap, boolen);
+    },
+    close($event) {
+      this.overlay.setPosition(undefined);
+      this.popupShow = false;
 
-        this.dispatchPlayById(this, "dormitory", ua);
-      } else if (
-        113.407539 < pos[0] &&
-        pos[0] < 113.409227 &&
-        (23.019375 < pos[1] && pos[1] < 23.020442)
-      ) {
-        if (this.audio.id == "lib") {
-          return;
-        }
-        this.dispatchPlayById(this, "lib", ua);
-      } else {
-        if (this.audio.id == "tech") {
-          return;
-        }
-        this.dispatchPlayById(this, "tech", ua);
-      }
+      return false;
     },
     dispatchPlayById(that, id, ua) {
-      that.$store
+      that.haddleActiveOverlayerMessageById(id, "auto");
+      //一定要先pause再切换src
+      this.pause();
+      this.audioShowContral(true);
+      this.$store
         .dispatch({
           type: "play",
           id: id
         })
-        .then(function(value) {
-          that.audioShowContral(true);
-
+        .then(() => {
           if (ua) {
             that.configJssdk();
           } else {
             that.play();
           }
         });
-
       that.haddleActiveOverlayerMessageById(id, "auto");
     },
 
@@ -404,23 +358,7 @@ export default {
         that.popupShow = true;
       });
     },
-    locate() {
-      this.setCenterFlag = true;
-      this.$store.commit({
-        type: "geoErrfun",
-        state: null
-      });
-      this.$store.commit({
-        type: "notHerefun",
-        state: null
-      });
-      this.loadingShow = true;
-      this.geofunction();
 
-      setTimeout(() => {
-        this.loadingShow = false;
-      }, 1000);
-    },
     setlayer(data) {
       if (data) {
         // console.log(this.styles)
@@ -460,12 +398,7 @@ export default {
         lable[i].style.visibility = state;
       }
     },
-    close($event) {
-      this.overlay.setPosition(undefined);
-      this.popupShow = false;
 
-      return false;
-    },
     toggleNav() {
       this.navShow = !this.navShow;
     },
@@ -505,7 +438,7 @@ export default {
       // this.configJssdk()
 
       var boolen = isMobile();
-      this.playByLocate(this.currentPosition, boolen);
+      this.playByAp(this.currentPosition);
       this.geofunction();
     }
   },

@@ -116,9 +116,14 @@ export default {
       }
     },
     audio: function (val) {
+      console.log('watchqudio')
       if (val) {
+        this.$refs.audio.pause();
+        this.$refs.audio.src=null
 
         this.$refs.audio.src = val.audioUrl;
+        this.$refs.audio.load();
+     
         console.log(this.$refs.audio.src)
       }
     }
