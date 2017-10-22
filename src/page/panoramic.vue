@@ -1,10 +1,7 @@
 <template>
     <div class="holder">
-        <!-- <common-header title="全景" ></common-header>
-        <div class="constainer">
-            <div class="demo" ref="demo"></div>
-        </div>-->
-        <iframe src="http://system.china-360.cn/vr/vr.php?id=317&from=singlemessage"></iframe>
+     
+        <iframe src="http://system.china-360.cn/vr/vr.php?id=317&from=singlemessage" ref="iframe"></iframe>
     </div>
 </template>
 <script>
@@ -27,36 +24,13 @@ export default {
 
     },
     mounted() {
-        let element = this.$refs.demo;
-        setTimeout(() => {
-            let PSV = new PhotoSphereViewer({
-                // Path to the panorama
-                panorama: '/static/img/quanjingtu1.jpg',
-                // Container
-                container: element,
+       let id = this.$route.params.id;
 
-                // Deactivate the animation
-                time_anim: false,
-
-                // Display the navigation bar
-                navbar: true,
-
-                // Resize the panorama
-                size: {
-                    width: '100%',
-                    height: '500px'
-                },
-
-
-                // Overlay
-                overlay: {
-
-                },
-
-                loading_msg: "正在加载，请稍后...",
-
-            });
-        }, 500)
+      
+       this.getIframeSrcById(id).then((url) => {
+          this.$refs.iframe.src=url
+        })
+   
 
 
     },
@@ -64,9 +38,9 @@ export default {
 
 
     },
-    methods: {
-
-    }
+      methods: {
+        ...mapActions(['getIframeSrcById'])
+    },
 }
 </script>
 

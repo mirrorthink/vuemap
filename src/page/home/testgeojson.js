@@ -41,7 +41,7 @@ var checkXMLDocObj = function(xmlFile) {
 };
 // 然后开始获取需要的Login/Weapon/W的第一个节点的属性值
 
-var xmlDoc = checkXMLDocObj("/static/ap.xml");
+var xmlDoc = checkXMLDocObj("/static/ap.xml?fdfasdfasd");
 
 var v = xmlDoc.getElementsByTagName("ipAddress")[0].childNodes[0].nodeValue;
 var len = xmlDoc.getElementsByTagName("ipAddress").length;
@@ -179,12 +179,14 @@ export function testIPlocate() {
             if (item.ipAddress == ip) {
               // alert(1);
               resolve(item.apLabel);
+
               flag = true;
               break;
             }
           }
           if (!flag) {
             reject("未检测到对应ap");
+            alert("未检测到对应ap");
           }
         }
       },

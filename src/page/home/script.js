@@ -43,12 +43,13 @@ export default {
           // url: 'http://localhost:9096/pts/{z}/{x}-{y}.jpg'
         })
       }),
+      /*
       layer2: new ol.layer.Tile({
         source: new ol.source.XYZ({
           url: "https://notifysystem.trade/pts_Road/{z}/{x}-{y}.png"
           // url: 'http://localhost:9096/jnu_Road/{z}/{x}-{y}.jpg'
         })
-      }),
+      }),*/
       //地图中心点
       center: ol.proj.transform(
         [113.5223325947326, 22.3178767486058],
@@ -322,6 +323,8 @@ export default {
     dispatchPlayById(that, id, ua) {
       that.haddleActiveOverlayerMessageById(id, "auto");
       //一定要先pause再切换src
+      //alert('dispatchPlayById'+id)
+
       this.pause();
       this.audioShowContral(true);
       this.$store

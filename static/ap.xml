@@ -36,7 +36,7 @@
               <acIpAddress>11.11.11.1</acIpAddress> 
               <acDevId>2</acDevId> 
         </clientBasicInfo> 
-                <clientBasicInfo id="0" name="试试"> 
+        <clientBasicInfo id="0" name="试试"> 
                <mac>ac:c1:ee:f1:42:7e</mac> 
               <ipAddress>113.105.10.50</ipAddress> 
               <userName /> 
@@ -54,7 +54,7 @@
               <acIpAddress>11.11.11.1</acIpAddress> 
               <acDevId>2</acDevId> 
         </clientBasicInfo> 
-                     <clientBasicInfo id="0" name="试试"> 
+        <clientBasicInfo id="0" name="试试"> 
                <mac>ac:c1:ee:f1:42:7e</mac> 
               <ipAddress>112.96.179.61</ipAddress> 
               <userName /> 
@@ -73,7 +73,7 @@
               <acDevId>2</acDevId> 
         </clientBasicInfo> 
            
-                     <clientBasicInfo id="0" name="试试"> 
+        <clientBasicInfo id="0" name="试试"> 
                <mac>ac:c1:ee:f1:42:7e</mac> 
               <ipAddress>58.248.229.150</ipAddress> 
               <userName /> 
@@ -91,7 +91,7 @@
               <acIpAddress>11.11.11.1</acIpAddress> 
               <acDevId>2</acDevId> 
         </clientBasicInfo> 
-                             <clientBasicInfo id="0" name="试试"> 
+         <clientBasicInfo id="0" name="试试"> 
                <mac>ac:c1:ee:f1:42:7e</mac> 
               <ipAddress>14.23.56.60</ipAddress> 
               <userName /> 
@@ -109,7 +109,7 @@
               <acIpAddress>11.11.11.1</acIpAddress> 
               <acDevId>2</acDevId> 
         </clientBasicInfo> 
-                             <clientBasicInfo id="0" name="试试"> 
+        <clientBasicInfo id="0" name="试试"> 
                <mac>ac:c1:ee:f1:42:7e</mac> 
               <ipAddress>112.96.128.7</ipAddress> 
               <userName /> 
@@ -121,6 +121,43 @@
               <location /> 
               <apSerialId>219801A0YD8178E04198</apSerialId> 
               <apLabel>ap1</apLabel> 
+              <apIpAddress>11.11.11.5</apIpAddress> 
+              <apMacAddress>94:28:2e:f3:a5:40</apMacAddress> 
+              <acLabel>H3C</acLabel> 
+              <acIpAddress>11.11.11.1</acIpAddress> 
+              <acDevId>2</acDevId> 
+        </clientBasicInfo> 
+           
+       <clientBasicInfo id="0" name="试试"> 
+               <mac>ac:c1:ee:f1:42:7e</mac> 
+              <ipAddress>218.107.17.36</ipAddress> 
+              <userName /> 
+              <channel>1</channel> 
+              <ssid>H3C.COM</ssid> 
+              <upTime>1345</upTime> 
+              <signalStrength>-52</signalStrength> 
+              <radioType>16</radioType> 
+              <location /> 
+              <apSerialId>219801A0YD8178E04198</apSerialId> 
+              <apLabel>ap2</apLabel> 
+              <apIpAddress>11.11.11.5</apIpAddress> 
+              <apMacAddress>94:28:2e:f3:a5:40</apMacAddress> 
+              <acLabel>H3C</acLabel> 
+              <acIpAddress>11.11.11.1</acIpAddress> 
+              <acDevId>2</acDevId> 
+        </clientBasicInfo> 
+               <clientBasicInfo id="0" name="试试"> 
+               <mac>ac:c1:ee:f1:42:7e</mac> 
+              <ipAddress>218.107.49.28</ipAddress> 
+              <userName /> 
+              <channel>1</channel> 
+              <ssid>H3C.COM</ssid> 
+              <upTime>1345</upTime> 
+              <signalStrength>-52</signalStrength> 
+              <radioType>16</radioType> 
+              <location /> 
+              <apSerialId>219801A0YD8178E04198</apSerialId> 
+              <apLabel>ap2</apLabel> 
               <apIpAddress>11.11.11.5</apIpAddress> 
               <apMacAddress>94:28:2e:f3:a5:40</apMacAddress> 
               <acLabel>H3C</acLabel> 

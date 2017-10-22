@@ -50,6 +50,24 @@ var audiolist = {
     }
   }
 };
+var panoramiclist = [
+  {
+    id: "ap1",
+    url: "http://system.china-360.cn/vr/scene.php?id=1972"
+  },
+  {
+    id: "ap2",
+    url: "http://system.china-360.cn/vr/scene.php?id=2095"
+  },
+  {
+    id: "ap3",
+    url: "http://system.china-360.cn/vr/scene.php?id=1972"
+  },
+  {
+    id: "ap4",
+    url: "http://system.china-360.cn/vr/scene.php?id=2095"
+  }
+];
 var imglist = [
   {
     id: "ap1",
@@ -437,6 +455,18 @@ export default {
           backgroundImage: "url(" + img + ")"
         }));
         resolve(newarr);
+      } else {
+        reject();
+      }
+    });
+  },
+  getIframeSrcById({ commit, state }, payload) {
+    return new Promise((resolve, reject) => {
+      let acitveItem = panoramiclist.filter(function(item) {
+        return item.id == payload;
+      });
+      if (acitveItem.length) {
+        resolve(acitveItem[0].url);
       } else {
         reject();
       }

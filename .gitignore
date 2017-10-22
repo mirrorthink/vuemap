@@ -1,6 +1,6 @@
 .DS_Store
-node_modules/
-dist/
+node_modules/**
+dist/**
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -8,4 +8,4 @@ test/unit/coverage
 test/e2e/reports
 selenium-debug.log
 设计输出_20170517/
-珠海唐家/
+珠海唐家/**
